@@ -26,27 +26,3 @@ userRouter.put("/update-profile", authMiddleware, updateProfile);
 userRouter.delete("/delete-profile", authMiddleware, deleteUser);
 
 module.exports = userRouter;
-
-// const express = require("express");
-// const userRouter = express.Router();
-// const {
-//   register,
-//   login,
-//   getProfile,
-//   updateProfile,
-//   deleteUser,
-// } = require("../controllers/user.controller");
-// const { validate } = require("../../../middleware/validate");
-// const { signupValidator, loginValidator } = require("../validators/user.validator");
-// const validateUser = require("../../../middleware/auth.middleware");
-
-// // Auth
-// userRouter.post("/register", validate(signupValidator), register);
-// userRouter.post("/login", validate(loginValidator), login);
-
-// // Profile routes (protected)
-// userRouter.get("/profile", validateUser, getProfile);
-// userRouter.put("/profile", validateUser, updateProfile);
-// userRouter.delete("/profile", validateUser, deleteUser);
-
-// module.exports = userRouter;

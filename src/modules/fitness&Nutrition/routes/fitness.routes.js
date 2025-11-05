@@ -11,12 +11,3 @@ fitnessRouter.put("/update-fitness/:id", authMiddleware, updateFitness);
 fitnessRouter.delete("/delete-fitness/:id", authMiddleware, deleteFitness);
 
 module.exports = { fitnessRouter };
-
-// const express = require("express");
-// const router = express.Router();
-// const { createFitnessPlan, getPlans } = require("../controllers/fitnessNutrition.controller");
-
-// router.post("/create", createFitnessPlan);
-// router.get("/plans", getPlans);
-
-// module.exports = router;

@@ -55,17 +55,3 @@ labinsightRouter.get("/generate-weekly-report", authMiddleware, async (req, res)
 });
 
 module.exports = { labinsightRouter };
-// 🧪 Temporary route to manually trigger weekly report generation
-
-// const express = require("express");
-// const labinsightRouter = express.Router();
-// const { authMiddleware } = require("../../../middleware/auth.middleware");
-// const { createInsight, fetchInsights, getDashboardInsights, downloadWeeklyReport, fetchAInsights } = require("../controllers/labInsights.controller");
-
-// labinsightRouter.post("/create", authMiddleware, createInsight);
-// labinsightRouter.get("/all", authMiddleware, fetchInsights);
-// labinsightRouter.get("/a/:insightId", authMiddleware, fetchAInsights);
-// labinsightRouter.get("/dashboard", authMiddleware, getDashboardInsights);
-// labinsightRouter.get("/weekly-report/download", authMiddleware, downloadWeeklyReport);
-
-// module.exports = { labinsightRouter };

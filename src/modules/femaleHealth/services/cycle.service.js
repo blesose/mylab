@@ -21,8 +21,6 @@ class CycleService {
     return await Cycle.findOne({ userId }).sort({ startDate: -1 });
   }
 }
-
-// const { generateSmartHealthTip } = require("../../../ai/ai.helper");
 const { generateSmartHealthTip } = require("../ai/ai.helper");
 
 async function getCycleHealthTip(userData) {
@@ -33,10 +31,6 @@ async function getCycleHealthTip(userData) {
   });
 }
 
-// const tip = generateSmartHealthTip({
-//   category: "Cycle",
-//   userData: { notes: cycle.notes },
-// });
 
 
 module.exports = { getCycleHealthTip };

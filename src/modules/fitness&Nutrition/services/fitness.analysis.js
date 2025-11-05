@@ -17,25 +17,3 @@ function analyzeFitnessProgress(records) {
 }
 
 module.exports = { analyzeFitnessProgress };
-// function analyzeFitnessProgress(records) {
-//   if (!records.length) return { message: "No records yet", trend: "N/A" };
-
-//   const avgDuration = records.reduce((s, r) => s + r.duration, 0) / records.length;
-//   const avgIntensity = records.filter(r => r.intensity === "high").length / records.length;
-
-//   return {
-//     trend: avgIntensity > 0.5 ? "High effort trend" : "Moderate consistency",
-//     avgDuration,
-//   };
-// }
-
-// module.exports = { analyzeFitnessProgress };
-// function analyzeProgress(history) {
-//   const averageCalories = history.reduce((sum, h) => sum + h.calories, 0) / history.length;
-//   return {
-//     trend: averageCalories > 2000 ? "High intake" : "Balanced intake",
-//     consistency: history.length > 5 ? "Consistent" : "Needs consistency",
-//   };
-// }
-
-// module.exports = { analyzeProgress };

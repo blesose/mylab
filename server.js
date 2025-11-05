@@ -125,7 +125,7 @@
 const express = require("express");
 require("dotenv").config();
 const connectDB = require("./src/config/DBconnection");
-
+const cors = require("cors")
 // ✅ Import cron job
 require("./src/modules/labInsights/cron/labinsights.cron");
 
@@ -142,6 +142,9 @@ const { labinsightsIndexRouter } = require("./src/modules/labInsights");
 const app = express();
 app.use(express.json());
 
+app.use(cors({ 
+  origin: ["http://localhost:5173"], 
+  methods:["GET", "POST", "PUT"]}));
 // ✅ Mount routes
 app.use("/api/users", userRouter);
 app.use("/api/females", femaleRouter);

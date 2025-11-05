@@ -20,25 +20,7 @@ function calculateNextCycle(startDate, cycleLength = 28) {
   nextCycle.setDate(nextCycle.getDate() + (cycleLength || 28));
   return nextCycle.toISOString();
 }
-// function calculateNextCycle(startDate, cycleLength) {
-//   const start = new Date(startDate);
-//   const nextCycleStart = new Date(start);
-//   nextCycleStart.setDate(start.getDate() + cycleLength);
-//   return nextCycleStart.toISOString().split("T")[0]; // returns yyyy-mm-dd
-// }
-// const startDate = "2025-10-01";
-// const cycleLength = 28;
-// console.log(calculateNextCycle(startDate, cycleLength));
 
-
-/**
- * Predict next cycle start date
- */
-// const calculateNextCycle = (start, cycleLength = 28) => {
-//   const next = new Date(start);
-//   next.setDate(next.getDate() + cycleLength);
-//   return next;
-// };
 
 module.exports = { calculateNextCycle, calculatePeriodLength };
 

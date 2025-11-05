@@ -11,11 +11,6 @@ nutritionRouter.put("/update-nutrition/:id", authMiddleware, updateNutrition);
 nutritionRouter.delete("/delete-nutrition/:id", authMiddleware, deleteNutrition);
 
 module.exports = { nutritionRouter };
-// // src/modules/femaleHealth/fitnessNutrition/routes/nutrition.routes.js
-// const express = require("express");
-// const router = express.Router();
-// const { createMealPlanHandler } = require("../controllers/nutrition.controller");
 
-// router.post("/plan", createMealPlanHandler);
 
 module.exports = { nutritionRouter };

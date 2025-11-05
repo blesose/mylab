@@ -18,12 +18,3 @@ const { error } = schema.validate(req.body);
   next();
 };
 module.exports = { fitnessValidator };
-// const Joi = require("joi");
-
-// const createPlanValidator = Joi.object({
-//   goal: Joi.string().valid("weight_loss", "muscle_gain", "maintenance").required(),
-//   activityLevel: Joi.string().valid("low", "moderate", "high").required(),
-//   dietaryPreference: Joi.string().valid("vegan", "vegetarian", "non_vegetarian").required(),
-// });
-
-// module.exports = { createPlanValidator };

@@ -26,34 +26,3 @@ async function getFitnessNutritionTip({ goal, activityLevel, duration, grade }) 
 }
 
 module.exports = { gradeFitness, getFitnessNutritionTip };
-// // src/helpers/ai.helper.js
-// function gradeFitness({ duration, intensity, frequency }) {
-//   let score = 0;
-//   if (duration >= 45) score += 3;
-//   else if (duration >= 30) score += 2;
-//   else if (duration >= 15) score += 1;
-
-//   if (intensity === "high") score += 3;
-//   else if (intensity === "medium") score += 2;
-//   else score += 1;
-
-//   if (frequency >= 5) score += 3;
-//   else if (frequency >= 3) score += 2;
-//   else score += 1;
-
-//   if (score >= 8) return "Excellent 💪";
-//   if (score >= 5) return "Good 👍";
-//   return "Needs Improvement 💤";
-// }
-
-// function gradeNutrition({ calories, protein, sugar, fiber }) {
-//   const warnings = [];
-//   if (calories > 2500) warnings.push("High calorie intake");
-//   if (sugar > 50) warnings.push("Too much sugar");
-//   if (protein < 50) warnings.push("Low protein");
-//   if (fiber < 25) warnings.push("Increase fiber");
-
-//   return warnings.length === 0 ? "Balanced Diet 🥗" : warnings.join(", ");
-// }
-
-// module.exports = { gradeFitness, gradeNutrition };

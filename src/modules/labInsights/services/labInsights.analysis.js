@@ -18,24 +18,3 @@ async function analyzeData(userId, category, rawData) {
 }
 
 module.exports = { analyzeData };
-// const LabInsights = require("../models/labInsights.model");
-// const { getAIInsight } = require("../utils/aiClient");
-
-// async function analyzeData(userId, category, rawData) {
-//   // Compute basic stats
-//   const average = rawData.length ? rawData.reduce((a, b) => a + b, 0) / rawData.length : 0;
-
-//   // Generate AI insight
-//   const aiTips = await getAIInsight(
-//     `Analyze this ${category} data: ${JSON.stringify(rawData)}. Give smart tips for better performance.`
-//   );
-
-//   return {
-//     userId,
-//     category,
-//     summary: `Average score: ${average.toFixed(2)} based on ${rawData.length} records.`,
-//     aiGeneratedTips: aiTips
-//   };
-// }
-
-// module.exports = { analyzeData };
