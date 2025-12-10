@@ -75,7 +75,6 @@ async function deleteRecordHandler(req, res, next) {
   }
 }
 
-
 module.exports = {
   createRecordHandler,
   listRecordsHandler,

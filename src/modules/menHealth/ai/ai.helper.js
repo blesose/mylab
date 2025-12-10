@@ -1,8 +1,7 @@
-/**
- * ai.helper.js
- * Central AI-like helper module for generating smart insights and wellness tips.
- * Handles both female and male health use cases.
- */
+  // ai.helper.js
+  // Central AI-like helper module for generating smart insights and wellness tips.
+  // Handles both female and male health use cases.
+
 
 const OpenAI = require("openai"); // Optional if you plan real AI API calls later
 // const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });

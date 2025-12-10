@@ -1,17 +1,14 @@
-/**
- * SelfCare AI Helper
- * --------------------------------------------------
- * Generates intelligent, human-like self-care insights and
- * practical tips based on user mood, activity, and duration.
- * This is a local/offline simulation suitable for production,
- * but can later be extended to real AI APIs.
- */
+   // SelfCare AI Helper
+  // --------------------------------------------------
+ // Generates intelligent, human-like self-care insights and
+// practical tips based on user mood, activity, and duration.
+// This is a local/offline simulation suitable for production,
+// but can later be extended to real AI APIs.
+ 
 
 const { randomUUID } = require("crypto");
 
-/**
- * Basic local intelligence for pattern analysis
- */
+// Basic local intelligence for pattern analysis
 const analyzeMoodShift = (moodBefore, moodAfter, duration) => {
   const improved =
     (moodBefore === "sad" || moodBefore === "stressed") &&
@@ -35,9 +32,7 @@ const analyzeMoodShift = (moodBefore, moodAfter, duration) => {
   return { improved, summary, score };
 };
 
-/**
- * Generate a smart self-care tip using local rule-based AI
- */
+// Generate a smart self-care tip using local rule-based AI
 const getSmartSelfCareTip = ({ activityType, duration, moodBefore, moodAfter }) => {
   const activityTips = {
     meditation: [

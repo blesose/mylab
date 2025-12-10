@@ -1,8 +1,3 @@
-/**
- * Cycle analysis module — part of the service layer
- * Computes averages, irregularities, and predictions
- */
-
 const { calculateNextCycle } = require("../utils/calculateCycle");
 const { generateSmartHealthTip } = require("../ai/ai.helper");
 

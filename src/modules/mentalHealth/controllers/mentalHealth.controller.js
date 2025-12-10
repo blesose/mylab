@@ -65,9 +65,7 @@ exports.createEntry = async (req, res, next) => {
   }
 };
 
-/**
- * ✅ Get all entries for a user
- */
+///Get all entries for all users
 exports.getAllEntries = async (req, res, next) => {
   try {
     const { userId } = req.params;
@@ -83,9 +81,7 @@ exports.getAllEntries = async (req, res, next) => {
   }
 };
 
-/**
- * ✅ Get single entry by ID
- */
+//Get single entry by ID
 exports.getSingleEntry = async (req, res, next) => {
   try {
     const entry = await MentalHealth.findById(req.params.entryId);
@@ -97,9 +93,7 @@ exports.getSingleEntry = async (req, res, next) => {
   }
 };
 
-/**
- * ✅ Update mood entry
- */
+// update mood entry
 exports.updateEntry = async (req, res, next) => {
   try {
     const { error } = moodEntryValidator.validate(req.body);
@@ -122,9 +116,7 @@ exports.updateEntry = async (req, res, next) => {
   }
 };
 
-/**
- * ✅ Delete mood entry
- */
+// Delete mood entry
 exports.deleteEntry = async (req, res, next) => {
   try {
     const entry = await MentalHealth.findByIdAndDelete(req.params.entryId);
@@ -139,9 +131,7 @@ exports.deleteEntry = async (req, res, next) => {
   }
 };
 
-/**
- * ✅ Get user's mood analysis report
- */
+//Get user's mood analysis report
 exports.getUserMentalHealth = async (req, res, next) => {
   try {
     const { userId } = req.params;
@@ -152,9 +142,7 @@ exports.getUserMentalHealth = async (req, res, next) => {
   }
 };
 
-/**
- * ✅ Get weekly summary
- */
+// Get weekly summary
 exports.getWeeklySummary = async (req, res, next) => {
   try {
     const summary = await generateWeeklyMentalHealthSummary();
@@ -164,23 +152,6 @@ exports.getWeeklySummary = async (req, res, next) => {
   }
 };
 
-
-// exports.createEntry = async (req, res) => {
-//   try {
-//     const { moodType, notes } = req.body;
-//     const userId = req.user?.id || "guest"; // adjust if you use auth middleware
-
-//     const entry = await createEntryService({ userId, moodType, notes });
-
-//     // enqueue mood analysis job
-//     await mentalHealthQueue.add("analyzeMoodPattern", { userId, entryId: entry._id });
-
-//     return res.status(201).json({ success: true, data: entry });
-//   } catch (err) {
-//     console.error("❌ createEntry error:", err);
-//     res.status(500).json({ success: false, message: "Internal server error" });
-//   }
-// };
 
 exports.getUserEntries = async (req, res) => {
   try {
@@ -192,51 +163,3 @@ exports.getUserEntries = async (req, res) => {
     res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
-
-// const { addMoodSchema } = require("../validators/mentalHealth.validator");
-// const mentalService = require("../services/mentalHealth.service");
-
-// exports.addMoodEntry = async (req, res) => {
-//   try {
-//     const { error, value } = addMoodSchema.validate(req.body);
-//     if (error) return res.status(400).json({ success: false, message: error.details[0].message });
-
-//     const userId = req.userData && req.userData.id;
-//     if (!userId) return res.status(401).json({ success: false, message: "Unauthorized" });
-
-//     const entry = await mentalService.createMoodEntry(userId, value);
-//     return res.status(201).json({ success: true, message: "Mood entry created", data: entry });
-//   } catch (err) {
-//     console.error("addMoodEntry error:", err);
-//     return res.status(500).json({ success: false, message: "Server error" });
-//   }
-// };
-
-// exports.getMoodHistory = async (req, res) => {
-//   try {
-//     const userId = req.userData && req.userData.id;
-//     if (!userId) return res.status(401).json({ success: false, message: "Unauthorized" });
-
-//     const { page = 1, limit = 50 } = req.query;
-//     const result = await mentalService.getMoodHistory(userId, { page, limit });
-//     return res.status(200).json({ success: true, data: result });
-//   } catch (err) {
-//     console.error("getMoodHistory error:", err);
-//     return res.status(500).json({ success: false, message: "Server error" });
-//   }
-// };
-
-// exports.getMoodById = async (req, res) => {
-//   try {
-//     const userId = req.userData && req.userData.id;
-//     const { id } = req.params;
-//     if (!userId) return res.status(401).json({ success: false, message: "Unauthorized" });
-
-//     const entry = await mentalService.getMoodById(userId, id);
-//     if (!entry) return res.status(404).json({ success: false, message: "Not found" });
-//     return res.status(200).json({ success: true, data: entry });
-//   } catch (err) {
-//     console.error("getMoodById error:", err);
-//     return res.status(500).json({ success: false, message: "Server error" });
-//   }
-// };

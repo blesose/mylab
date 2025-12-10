@@ -1,8 +1,5 @@
 // src/modules/mentalHealth/services/mentalHealth.analysis.js
-/**
- * Lightweight analysis utilities for mental health
- */
-
+// Lightweight analysis utilities for mental health
 function computeMoodDistribution(entries) {
   const dist = {};
   entries.forEach(e => {
@@ -69,29 +66,3 @@ export async function analyzeMood(req, res) {
 
   res.json({ trend: negative ? "negative" : "stable" });
 }
-
-
-// // src/modules/mentalHealth/services/mentalHealth.analysis.js
-// exports.getMentalInsightsForUser = (records) => {
-//   if (!records || records.length === 0) return ["No recent records found"];
-
-//   const counts = records.reduce((acc, r) => {
-//     acc[r.moodType] = (acc[r.moodType] || 0) + 1;
-//     return acc;
-//   }, {});
-
-//   const total = records.length;
-//   const stressRatio = ((counts.stressed || 0) + (counts.sad || 0)) / total;
-
-//   if (stressRatio > 0.4)
-//     return [
-//       "You've had several stressful or sad days recently — consider meditation or journaling.",
-//       "Reach out to a friend or counselor if the pattern continues.",
-//     ];
-
-//   if ((counts.happy || 0) / total > 0.5)
-//     return ["You're maintaining a positive outlook — keep it up! 🌞"];
-
-//   return ["Mixed mood trend detected — maintain good rest, nutrition, and routine."];
-// };
-

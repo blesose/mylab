@@ -21,14 +21,3 @@ const { error } = schema.validate(req.body);
 };
 
 module.exports = { selfCareValidator };
-
-// const Joi = require("joi");
-
-// const addActivityValidator = Joi.object({
-//   activityType: Joi.string().valid("meditation", "sleep", "exercise", "journaling", "hydration").required(),
-//   duration: Joi.number().min(0),
-//   notes: Joi.string().max(250),
-//   mood: Joi.string().valid("happy", "calm", "tired", "stressed", "neutral")
-// });
-
-// module.exports = { addActivityValidator };

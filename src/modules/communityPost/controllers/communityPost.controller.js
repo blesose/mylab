@@ -1,3 +1,4 @@
+//src/modules/communityPost/controllers
 const {
   createPost,
   getAllPosts,

@@ -4,11 +4,11 @@ const SleepRecord = require("../models/sleep.model");
 const { analyzeSleepPattern } = require("./sleep.analysis");
 const { getSmartTip } = require("../ai/ai.helper"); // ✅ Adjust path as needed
 
-/**
- * Log a new sleep record and generate insights + AI tip.
- * @param {object} data - Sleep record details
- * @returns {object} record, analysis, aiResponse
- */
+
+  // Log a new sleep record and generate insights + AI tip.
+  // @param {object} data - Sleep record details
+  // @returns {object} record, analysis, aiResponse
+ 
 const logSleepRecord = async (data) => {
   try {
     const { userId, date, sleepStart, sleepEnd, sleepQuality, notes } = data;

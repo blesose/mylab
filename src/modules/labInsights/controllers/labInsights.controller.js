@@ -56,25 +56,7 @@ const getDashboardInsights = async (req, res) => {
   }
 };
 
-// const downloadWeeklyReport = async (req, res) => {
-//   try {
-//     const REPORT_DIR = path.join(__dirname, "../../../reports");
-//     const files = fs.readdirSync(REPORT_DIR)
-//       .filter(f => f.endsWith(".pdf"))
-//       .sort((a, b) => fs.statSync(path.join(REPORT_DIR, b)).mtime - fs.statSync(path.join(REPORT_DIR, a)).mtime);
 
-//     if (!files.length) {
-//       return res.status(404).json({ success: false, message: "No weekly report found yet" });
-//     }
-
-//     const latestReport = files[0];
-//     const filePath = path.join(REPORT_DIR, latestReport);
-
-//     res.download(filePath, latestReport);
-//   } catch (err) {
-//     res.status(500).json({ success: false, message: err.message });
-//   }
-// };
 const downloadWeeklyReport = async (req, res) => {
   try {
     // ✅ Correct path to match where reports are saved

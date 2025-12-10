@@ -7,11 +7,3 @@ export const suggestNextActivity = (mood) => {
   };
   return suggestions[mood] || "Do something that makes you feel calm and relaxed.";
 };
-
-// function calculateWellnessScore(entries) {
-//   if (!entries.length) return 0;
-//   const total = entries.reduce((acc, e) => acc + (e.duration || 0), 0);
-//   return Math.min(100, Math.round(total / entries.length));
-// }
-
-// module.exports = { calculateWellnessScore };

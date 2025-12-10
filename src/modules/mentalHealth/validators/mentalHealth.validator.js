@@ -10,16 +10,3 @@ const logEntrySchema = Joi.object({
 });
 
 module.exports = { logEntrySchema };
-
-
-
-// const Joi = require("joi");
-
-// const createMentalHealthEntryValidator = Joi.object({
-//   moodType: Joi.string()
-//     .valid("happy", "sad", "stressed", "anxious", "calm", "neutral")
-//     .required(),
-//   notes: Joi.string().max(500).allow(""),
-// });
-
-// module.exports = { createMentalHealthEntryValidator };

@@ -25,14 +25,4 @@ selfcareRouter.put("/update-selfcare/:activitiesId", authMiddleware, updateSelfC
 selfcareRouter.delete("/delete-selfcare/:id", authMiddleware, deleteSelfCare);
 
 module.exports = { selfcareRouter };
-// const express = require("express");
-// const { addSelfCare, fetchSelfCareActivities } = require("../controllers/selfCare.controller");
-// const { authMiddleware } = require("../../../middleware/auth.middleware");
-// const selfcareRouter = express.Router();
-
-// selfcareRouter.post("/add", authMiddleware, addSelfCare);
-// selfcareRouter.get("/:userId",  authMiddleware, fetchSelfCareActivities);
-
-// module.exports = { selfcareRouter };
-
 

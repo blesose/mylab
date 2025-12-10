@@ -38,7 +38,7 @@ const deleteOldReports = () => {
   }
 };
 
-// 🕒 Schedule: Run every Sunday at midnight
+// Schedule: Run every Sunday at midnight
 cron.schedule("0 0 * * 0", async () => {
   console.log(`[${new Date().toISOString()}] 🧠 Running LabInsights weekly report...`);
 

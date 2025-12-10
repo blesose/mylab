@@ -1,5 +1,4 @@
 // src/modules/femaleHealth/utils/ai.helper.js
-
 function generateSmartHealthTip({ category, userData = {}, context }) {
   if (category === "Pregnancy") {
     const week = userData.currentWeek || 1;

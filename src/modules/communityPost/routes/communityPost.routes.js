@@ -12,15 +12,3 @@ commmunitypostRouter.post("/like-post/:id/like", authMiddleware, likeCommunityPo
 commmunitypostRouter.post("/comment-post/:id/comment", authMiddleware, commentCommunityPost);
 
 module.exports = { commmunitypostRouter };
-// const express = require("express");
-// const router = express.Router();
-// const { validate } = require("../../../middlewares/validate");
-// const { createPostValidator } = require("../validators/communityPost.validator");
-// const { createPost, getAllPosts, likePost } = require("../controllers/communityPost.controller");
-
-// router.post("/", validate(createPostValidator), createPost);
-// router.get("/", getAllPosts);
-// router.post("/:id/like", likePost);
-// router.post("/:id/comment", commentOnPost);
-
-// module.exports = router;

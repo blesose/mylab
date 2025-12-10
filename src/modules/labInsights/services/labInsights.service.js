@@ -1,4 +1,3 @@
-
 const fs = require("fs");
 const path = require("path");
 const PDFDocument = require("pdfkit");
@@ -20,11 +19,10 @@ async function getRecentInsights(limit = 10) {
   return LabInsights.find().sort({ createdAt: -1 }).limit(limit);
 }
 
-/**
- * 🧠 Generate a Weekly Lab Insights Report
- * - Fetches the latest insights from all users
- * - Saves as a PDF in /reports directory
- */
+  //  Generate a Weekly Lab Insights Report
+  //  Fetches the latest insights from all users
+  //  Saves as a PDF in /reports directory
+ 
 
  const generateLabInsightsReport = async () => {
   try {
@@ -34,19 +32,19 @@ async function getRecentInsights(limit = 10) {
       return { success: false, message: "No weekly report found yet" };
     }
 
-    // ✅ Ensure reports directory exists (in /report/generated)
+    // Ensure reports directory exists (in /report/generated)
     const REPORT_DIR = path.join(__dirname, "../../report/generated");
     if (!fs.existsSync(REPORT_DIR)) {
       fs.mkdirSync(REPORT_DIR, { recursive: true });
       console.log("📁 Created reports directory at:", REPORT_DIR);
     }
 
-    // ✅ Generate PDF file name and path
+    // Generate PDF file name and path
     const timestamp = new Date().toISOString().split("T")[0];
     const fileName = `LabInsights_Report_${timestamp}.pdf`;
     const filePath = path.join(REPORT_DIR, fileName);
 
-    // ✅ Create PDF
+    // Create PDF
     const doc = new PDFDocument();
     const writeStream = fs.createWriteStream(filePath);
     doc.pipe(writeStream);

@@ -1,8 +1,3 @@
-/**
- * Ovulation typically occurs 14 days before next period.
- * Fertile window: 5 days before ovulation + ovulation day itself.
- */
-
 const calculateOvulation = (cycleStart, cycleLength = 28) => {
   const start = new Date(cycleStart);
   const ovulation = new Date(start);
