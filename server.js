@@ -18,12 +18,36 @@ const { labinsightsIndexRouter } = require("./src/modules/labInsights");
 const app = express();
 app.use(express.json());
 
-app.use(cors({ 
-  origin: ["https://mylabroyal.onrender.com", "http://localhost:5173"], 
-  methods:["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-   allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: true
-}));
+// app.use(cors({ 
+//   origin: ["https://mylabroyal.onrender.com", "http://localhost:5173"], 
+//   methods:["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+//    allowedHeaders: ["Content-Type", "Authorization"],
+//   credentials: true
+// }));
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    const allowedOrigins = [
+      'https://mylabroyal.onrender.com',
+      'http://localhost:5173',
+      'http://localhost:5175'
+    ];
+    
+    // Allow requests with no origin (like mobile apps or Postman)
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
+  exposedHeaders: ['Content-Range', 'X-Content-Range'],
+  optionsSuccessStatus: 200
+};
+
+app.use(cors(corsOptions));
 
 app.use("/api/users", userRouter);
 app.use("/api/females", femaleRouter);
@@ -65,3 +89,4 @@ connectDB();
 app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
 });
+//update server.js
