@@ -2,18 +2,15 @@ const userschema = require("../models/user.schema");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-// Helper function to hide sensitive fields
 const sanitizeUser = (user) => {
   const { password, __v, ...safeData } = user.toObject();
   return safeData;
 };
 
-// ---------------------- REGISTER ----------------------
 const register = async (req, res) => {
   try {
     const { name, userName, email, password, phone, dob, gender, role } = req.body;
 
-    // Check missing fields
     if (!name || !userName || !email || !password || !phone || !dob || !gender || !role) {
       return res.status(400).json({
         success: false,
@@ -21,7 +18,6 @@ const register = async (req, res) => {
       });
     }
 
-    // Check if email already exists
     const existingUser = await userschema.findOne({ email });
     if (existingUser) {
       return res.status(409).json({
@@ -30,10 +26,8 @@ const register = async (req, res) => {
       });
     }
 
-    // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create new user
     const newUser = await userschema.create({
       name,
       userName,
@@ -45,14 +39,13 @@ const register = async (req, res) => {
       role,
     });
 
-    // Generate JWT token
     const token = jwt.sign(
       {
         id: newUser._id,
         email: newUser.email,
         role: newUser.role,
       },
-      process.env.JWT_SECRET, // must be defined in .env
+      process.env.JWT_SECRET,
       { expiresIn: "7d" }
     );
 
@@ -75,7 +68,6 @@ const register = async (req, res) => {
   }
 };
 
-// ---------------------- LOGIN ----------------------
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -94,9 +86,6 @@ const login = async (req, res) => {
         message: "Invalid credentials",
       });
     }
-//     console.log("Body password:", password);
-// console.log("User password from DB:", user?.password);
-
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
@@ -133,7 +122,6 @@ const login = async (req, res) => {
   }
 };
 
-// ---------------------- GET PROFILE ----------------------
 const getProfile = async (req, res) => {
   try {
     const user = await userschema.findById(req.userId);
@@ -159,7 +147,6 @@ const getProfile = async (req, res) => {
   }
 };
 
-// ---------------------- GET ALL USERS ----------------------
 const getAllUsers = async (req, res) => {
   try {
     const users = await userschema.find();
@@ -185,7 +172,6 @@ const getAllUsers = async (req, res) => {
   }
 };
 
-// ---------------------- UPDATE PROFILE ----------------------
 const updateProfile = async (req, res) => {
   try {
     const updates = { ...req.body };
@@ -220,7 +206,6 @@ const updateProfile = async (req, res) => {
   }
 };
 
-// ---------------------- DELETE USER ----------------------
 const deleteUser = async (req, res) => {
   try {
     const deletedUser = await userschema.findByIdAndDelete(req.userId);

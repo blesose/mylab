@@ -55,3 +55,58 @@ labinsightRouter.get("/generate-weekly-report", authMiddleware, async (req, res)
 });
 
 module.exports = { labinsightRouter };
+
+// // // labInsights.routes.js - UPDATED VERSION
+// // const express = require("express");
+// // const labinsightRouter = express.Router();
+// // const { authMiddleware } = require("../../../middleware/auth.middleware");
+// // const { 
+// //   createInsight, 
+// //   fetchInsights, 
+// //   getDashboardInsights, 
+// //   downloadWeeklyReport,
+// //   fetchAInsights,
+// //   generateWeeklyReport // NEW
+// // } = require("../controllers/labInsights.controller");
+
+// // // Routes
+// // labinsightRouter.post("/create", authMiddleware, createInsight);
+// // labinsightRouter.get("/all", authMiddleware, fetchInsights);
+// // labinsightRouter.get("/a/:insightId", authMiddleware, fetchAInsights);
+// // labinsightRouter.get("/dashboard", authMiddleware, getDashboardInsights);
+
+// // // NEW: Generate weekly report
+// // labinsightRouter.post("/weekly-report/generate", authMiddleware, generateWeeklyReport);
+
+// // // Updated: Support both filename parameter and fresh generation
+// // labinsightRouter.get("/weekly-report/download/", authMiddleware, downloadWeeklyReport);
+
+// // module.exports = { labinsightRouter };
+
+// // labInsights.routes.js - CORRECTED VERSION
+// const express = require("express");
+// const labinsightRouter = express.Router();
+// const { authMiddleware } = require("../../../middleware/auth.middleware");
+// const { 
+//   createInsight, 
+//   fetchInsights, 
+//   getDashboardInsights, 
+//   downloadWeeklyReport,
+//   fetchAInsights,
+//   generateWeeklyReport  // Make sure this is imported
+// } = require("../controllers/labInsights.controller");
+
+// // Routes
+// labinsightRouter.post("/create", authMiddleware, createInsight);
+// labinsightRouter.get("/all", authMiddleware, fetchInsights);
+// labinsightRouter.get("/a/:insightId", authMiddleware, fetchAInsights);
+// labinsightRouter.get("/dashboard", authMiddleware, getDashboardInsights);
+
+// // Generate weekly report
+// labinsightRouter.post("/weekly-report/generate", authMiddleware, generateWeeklyReport);
+
+// // Two separate routes for download
+// labinsightRouter.get("/weekly-report/download", authMiddleware, downloadWeeklyReport);
+// labinsightRouter.get("/weekly-report/download/:filename", authMiddleware, downloadWeeklyReport);
+
+// module.exports = { labinsightRouter };

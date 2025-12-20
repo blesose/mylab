@@ -2,10 +2,10 @@ const express = require("express");
 require("dotenv").config();
 const connectDB = require("./src/config/DBconnection");
 const cors = require("cors")
-// ✅ Import cron job
+
 require("./src/modules/labInsights/cron/labinsights.cron");
 
-// ✅ Routers
+
 const userRouter = require("./src/modules/users/routes/user.routes");
 const femaleRouter = require("./src/modules/femaleHealth");
 const { mensHealthRouter } = require("./src/modules/menHealth");
@@ -19,9 +19,12 @@ const app = express();
 app.use(express.json());
 
 app.use(cors({ 
-  origin: ["https://mylabroyal.onrender.com"], 
-  methods:["GET", "POST", "PUT", "DELETE"]}));
-// ✅ Mount routes
+  origin: ["https://mylabroyal.onrender.com", "http://localhost:5173"], 
+  methods:["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+   allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true
+}));
+
 app.use("/api/users", userRouter);
 app.use("/api/females", femaleRouter);
 app.use("/api/mens", mensHealthRouter);
@@ -31,7 +34,7 @@ app.use("/api/fitnessnutrition", fitnessNutritionRouter);
 app.use("/api/communitypost", communityPostIndexRouter);
 app.use("/api/labinsights", labinsightsIndexRouter);
 
-// ✅ Root route
+
 app.get("/", (req, res) => {
   res.json({
     data: true,
@@ -39,7 +42,7 @@ app.get("/", (req, res) => {
   });
 });
 
-// Error middleware
+
 app.use((err, req, res, next) => {
   console.error("💥 Error caught:", err.message);
   res.status(500).json({
@@ -48,7 +51,7 @@ app.use((err, req, res, next) => {
   });
 });
 
-// 404 middleware
+
 app.use((req, res) => {
   res.status(404).json({
     success: false,
@@ -57,8 +60,6 @@ app.use((req, res) => {
 });
 
 const PORT = process.env.PORT || 9000;
-
-// ✅ Connect DB and start server
 connectDB();
 
 app.listen(PORT, () => {
