@@ -1,60 +1,60 @@
-const express = require("express");
-const labinsightRouter = express.Router();
-const { authMiddleware } = require("../../../middleware/auth.middleware");
-const { createInsight, fetchInsights, getDashboardInsights, downloadWeeklyReport, fetchAInsights } = require("../controllers/labInsights.controller");
-const { generateInsight } = require("../services/labInsights.service");
-//routes
-labinsightRouter.post("/create", authMiddleware, createInsight);
-labinsightRouter.get("/all", authMiddleware, fetchInsights);
-labinsightRouter.get("/a/:insightId", authMiddleware, fetchAInsights);
-labinsightRouter.get("/dashboard", authMiddleware, getDashboardInsights);
-labinsightRouter.get("/weekly-report/download", authMiddleware, downloadWeeklyReport);
-labinsightRouter.post("/analyze", authMiddleware, async (req, res) => {
-  try {
-    const { userId, category, data } = req.body;
-    if (!userId || !category || !data) {
-      return res.status(400).json({
-        success: false,
-        message: "userId, category, and data are required."
-      });
-    }
+// const express = require("express");
+// const labinsightRouter = express.Router();
+// const { authMiddleware } = require("../../../middleware/auth.middleware");
+// const { createInsight, fetchInsights, getDashboardInsights, downloadWeeklyReport, fetchAInsights } = require("../controllers/labInsights.controller");
+// const { generateInsight } = require("../services/labInsights.service");
+// //routes
+// labinsightRouter.post("/create", authMiddleware, createInsight);
+// labinsightRouter.get("/all", authMiddleware, fetchInsights);
+// labinsightRouter.get("/a/:insightId", authMiddleware, fetchAInsights);
+// labinsightRouter.get("/dashboard", authMiddleware, getDashboardInsights);
+// labinsightRouter.get("/weekly-report/download", authMiddleware, downloadWeeklyReport);
+// labinsightRouter.post("/analyze", authMiddleware, async (req, res) => {
+//   try {
+//     const { userId, category, data } = req.body;
+//     if (!userId || !category || !data) {
+//       return res.status(400).json({
+//         success: false,
+//         message: "userId, category, and data are required."
+//       });
+//     }
 
-    const insight = await generateInsight(userId, category, data);
-    res.status(201).json({
-      success: true,
-      message: "Insight generated successfully",
-      insight
-    });
-  } catch (error) {
-    console.error("Error generating insight:", error);
-    res.status(500).json({
-      success: false,
-      message: "Failed to generate insight",
-      error: error.message
-    });
-  }
-});
+//     const insight = await generateInsight(userId, category, data);
+//     res.status(201).json({
+//       success: true,
+//       message: "Insight generated successfully",
+//       insight
+//     });
+//   } catch (error) {
+//     console.error("Error generating insight:", error);
+//     res.status(500).json({
+//       success: false,
+//       message: "Failed to generate insight",
+//       error: error.message
+//     });
+//   }
+// });
 
-labinsightRouter.get("/generate-weekly-report", authMiddleware, async (req, res) => {
-  try {
-    const { generateLabInsightsReport } = require("../services/labInsights.service");
-    const result = await generateLabInsightsReport();
-    res.json({
-      success: true,
-      message: "Manual weekly report generation completed.",
-      result
-    });
-  } catch (err) {
-    console.error("Manual weekly report error:", err.message);
-    res.status(500).json({
-      success: false,
-      message: "Failed to generate weekly report.",
-      error: err.message
-    });
-  }
-});
+// labinsightRouter.get("/generate-weekly-report", authMiddleware, async (req, res) => {
+//   try {
+//     const { generateLabInsightsReport } = require("../services/labInsights.service");
+//     const result = await generateLabInsightsReport();
+//     res.json({
+//       success: true,
+//       message: "Manual weekly report generation completed.",
+//       result
+//     });
+//   } catch (err) {
+//     console.error("Manual weekly report error:", err.message);
+//     res.status(500).json({
+//       success: false,
+//       message: "Failed to generate weekly report.",
+//       error: err.message
+//     });
+//   }
+// });
 
-module.exports = { labinsightRouter };
+// module.exports = { labinsightRouter };
 
 // // // labInsights.routes.js - UPDATED VERSION
 // // const express = require("express");
@@ -83,30 +83,30 @@ module.exports = { labinsightRouter };
 
 // // module.exports = { labinsightRouter };
 
-// // labInsights.routes.js - CORRECTED VERSION
-// const express = require("express");
-// const labinsightRouter = express.Router();
-// const { authMiddleware } = require("../../../middleware/auth.middleware");
-// const { 
-//   createInsight, 
-//   fetchInsights, 
-//   getDashboardInsights, 
-//   downloadWeeklyReport,
-//   fetchAInsights,
-//   generateWeeklyReport  // Make sure this is imported
-// } = require("../controllers/labInsights.controller");
+// labInsights.routes.js - CORRECTED VERSION
+const express = require("express");
+const labinsightRouter = express.Router();
+const { authMiddleware } = require("../../../middleware/auth.middleware");
+const { 
+  createInsight, 
+  fetchInsights, 
+  getDashboardInsights, 
+  downloadWeeklyReport,
+  fetchAInsights,
+  generateWeeklyReport  // Make sure this is imported
+} = require("../controllers/labInsights.controller");
 
-// // Routes
-// labinsightRouter.post("/create", authMiddleware, createInsight);
-// labinsightRouter.get("/all", authMiddleware, fetchInsights);
-// labinsightRouter.get("/a/:insightId", authMiddleware, fetchAInsights);
-// labinsightRouter.get("/dashboard", authMiddleware, getDashboardInsights);
+// Routes
+labinsightRouter.post("/create", authMiddleware, createInsight);
+labinsightRouter.get("/all", authMiddleware, fetchInsights);
+labinsightRouter.get("/a/:insightId", authMiddleware, fetchAInsights);
+labinsightRouter.get("/dashboard", authMiddleware, getDashboardInsights);
 
-// // Generate weekly report
-// labinsightRouter.post("/weekly-report/generate", authMiddleware, generateWeeklyReport);
+// Generate weekly report
+labinsightRouter.post("/weekly-report/generate", authMiddleware, generateWeeklyReport);
 
-// // Two separate routes for download
-// labinsightRouter.get("/weekly-report/download", authMiddleware, downloadWeeklyReport);
-// labinsightRouter.get("/weekly-report/download/:filename", authMiddleware, downloadWeeklyReport);
+// Two separate routes for download
+labinsightRouter.get("/weekly-report/download", authMiddleware, downloadWeeklyReport);
+labinsightRouter.get("/weekly-report/download/:filename", authMiddleware, downloadWeeklyReport);
 
-// module.exports = { labinsightRouter };
+module.exports = { labinsightRouter };
