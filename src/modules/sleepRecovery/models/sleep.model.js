@@ -1,4 +1,4 @@
-// src/modules/sleep/models/sleep.model.js
+
 const mongoose = require("mongoose");
 
 const sleepSchema = new mongoose.Schema({
