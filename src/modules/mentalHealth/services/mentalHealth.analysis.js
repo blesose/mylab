@@ -1,0 +1,67 @@
+// Lightweight analysis utilities for mental health
+function computeMoodDistribution(entries) {
+  const dist = {};
+  entries.forEach(e => {
+    dist[e.moodType] = (dist[e.moodType] || 0) + 1;
+  });
+  return dist;
+}
+
+function detectNegativeTrend(entries, windowSize = 10) {
+  // look at last `windowSize` entries and compute negative ratio
+  const last = entries.slice(0, windowSize);
+  if (!last.length) return { negativeRatio: 0, flagged: false };
+  const negativeCount = last.filter(e => ["sad","stressed","anxious"].includes(e.moodType)).length;
+  const ratio = negativeCount / last.length;
+  return { negativeRatio: ratio, flagged: ratio >= 0.4 }; // flag if >=40% negative
+}
+
+
+module.exports = { computeMoodDistribution, detectNegativeTrend };
+// modules/mentalHealth/service/mentalHealth.analysis.js
+export function detectNegativeTrend(moodEntries) {
+  const threshold = -0.3; // drop in average mood
+  if (moodEntries.length < 3) return false;
+  
+  const avg = arr => arr.reduce((a, b) => a + b, 0) / arr.length;
+  const firstHalf = avg(moodEntries.slice(0, Math.floor(moodEntries.length / 2)));
+  const secondHalf = avg(moodEntries.slice(Math.floor(moodEntries.length / 2)));
+
+  return secondHalf - firstHalf < threshold;
+}
+
+
+exports.analyzeMoodTrends = async (userId) => {
+  console.log(`🔍 Running mood analysis for user ${userId}`);
+
+  // In production, this would pull from DB
+  const fakeData = [
+    { mood: "calm", stress: 3 },
+    { mood: "happy", stress: 2 },
+    { mood: "neutral", stress: 4 },
+  ];
+
+  const averageStress = fakeData.reduce((sum, m) => sum + m.stress, 0) / fakeData.length;
+
+  return {
+    userId,
+    trend: averageStress < 5 ? "Improving" : "Needs attention",
+    recommendation:
+      averageStress < 5
+        ? "Continue mindfulness & exercise."
+        : "Consider talking with a counselor.",
+  };
+};
+import { detectNegativeTrend } from "../service/mentalHealth.analysis.js";
+import { queueMentalHealthAlert } from "../jobs/mentalHealthAlert.job.js";
+
+export async function analyzeMood(req, res) {
+  const { moodEntries, user } = req.body;
+  const negative = detectNegativeTrend(moodEntries);
+
+  if (negative) {
+    await queueMentalHealthAlert(user);
+  }
+
+  res.json({ trend: negative ? "negative" : "stable" });
+}

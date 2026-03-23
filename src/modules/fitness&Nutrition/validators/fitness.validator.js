@@ -1,0 +1,24 @@
+const Joi = require("joi");
+
+const fitnessValidator = (req, res, next) => {
+  const schema = Joi.object({
+    activityType: Joi.string().required(),
+    duration: Joi.number().min(10).required(),
+    intensity: Joi.string().valid("low", "medium", "high").required(),
+    frequency: Joi.number().min(1).max(7).required(),
+    goal: Joi.string()
+      .valid("weight_loss", "muscle_gain", "endurance", "flexibility", "general_health")
+      .required(), // ADD THIS
+  });
+
+  const { error } = schema.validate(req.body);
+  if (error) {
+    return res
+      .status(400)
+      .json({ success: false, message: error.details[0].message });
+  }
+
+  next();
+};
+
+module.exports = { fitnessValidator };
