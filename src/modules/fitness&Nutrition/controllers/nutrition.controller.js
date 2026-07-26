@@ -12,7 +12,6 @@ const createNutrition = async (req, res) => {
     console.log('📝 Creating nutrition entry for user:', req.userId);
     console.log('📝 Nutrition data:', req.body);
     
-    // Only require basic fields
     const requiredFields = ['meal', 'calories', 'mealType'];
     for (const field of requiredFields) {
       if (!req.body[field]) {
@@ -23,7 +22,6 @@ const createNutrition = async (req, res) => {
       }
     }
     
-    // Prepare data with defaults for optional fields
     const nutritionData = {
       userId: req.userId,
       meal: req.body.meal.trim(),
@@ -39,12 +37,11 @@ const createNutrition = async (req, res) => {
       createdAt: req.body.date ? new Date(req.body.date) : new Date(),
     };
     
-    // Grade the nutrition entry (optional)
     let grade = "Good choice!";
     try {
       grade = gradeNutrition(nutritionData);
     } catch (error) {
-      console.log('⚠️ Grade generation failed, using default');
+      console.log('Grade generation failed, using default');
     }
     
     // Generate AI tip
@@ -53,7 +50,7 @@ const createNutrition = async (req, res) => {
       const aiTipData = await getNutritionTip({ ...nutritionData, grade });
       aiTip = aiTipData?.tip || aiTip;
     } catch (error) {
-      console.log('⚠️ AI tip generation failed, using default');
+      console.log('AI tip generation failed, using default');
     }
     
     nutritionData.grade = grade;
@@ -64,11 +61,11 @@ const createNutrition = async (req, res) => {
     
     res.status(201).json({ 
       success: true, 
-      message: "Meal logged successfully! 🍎", 
+      message: "Meal logged successfully!", 
       data: meal 
     });
   } catch (err) {
-    console.error('❌ Error in createNutrition:', err);
+    console.error('Error in createNutrition:', err);
     res.status(500).json({ success: false, message: err.message });
   }
 };
@@ -78,7 +75,7 @@ const getAllNutrition = async (req, res) => {
     const data = await getUserNutritionEntries(req.userId);
     res.status(200).json({ success: true, data });
   } catch (err) {
-    console.error('❌ Error in getAllNutrition:', err);
+    console.error('Error in getAllNutrition:', err);
     res.status(500).json({ success: false, message: err.message });
   }
 };
@@ -93,7 +90,7 @@ const getANutrition = async (req, res) => {
     }
     res.status(200).json({ success: true, data });
   } catch (err) {
-    console.error('❌ Error in getANutrition:', err);
+    console.error('Error in getANutrition:', err);
     res.status(500).json({ success: false, message: err.message });
   }
 };
@@ -115,10 +112,10 @@ const updateNutrition = async (req, res) => {
     };
     
     const updated = await updateNutritionEntry(id, updates);
-    console.log('✅ Updated meal:', updated);
+    console.log('Updated meal:', updated);
     res.status(200).json({ success: true, message: "Meal updated!", data: updated });
   } catch (err) {
-    console.error('❌ Error in updateNutrition:', err);
+    console.error('Error in updateNutrition:', err);
     res.status(500).json({ success: false, message: err.message });
   }
 };
@@ -128,7 +125,7 @@ const deleteNutrition = async (req, res) => {
     await deleteNutritionEntry(req.params.id);
     res.status(200).json({ success: true, message: "Meal deleted successfully" });
   } catch (err) {
-    console.error('❌ Error in deleteNutrition:', err);
+    console.error('Error in deleteNutrition:', err);
     res.status(500).json({ success: false, message: err.message });
   }
 };

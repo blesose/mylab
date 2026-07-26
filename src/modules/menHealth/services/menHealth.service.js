@@ -1,21 +1,17 @@
 const MenHealth = require("../models/menHealth.model");
 const { generateSmartHealthTip } = require("../ai/ai.helper");
 
-// ---------------- COMPUTE INSIGHTS ----------------
 async function computeInsights(userId, currentPayload) {
-  // Fetch last 4 previous records
   const records = await MenHealth.find({ userId })
     .sort({ createdAt: -1 })
     .limit(4);
 
   console.log("Incoming data to computeInsights:", currentPayload);
 
-  // Only compute averages if at least 1 previous record exists
   if (records.length < 1) {
     return { insights: [], advice: "" };
   }
 
-  // Include current payload into calculation
   const allRecords = [
     ...records.map((r) => ({
       sleepHours: Number(r.sleepHours) || 0,
@@ -61,39 +57,32 @@ async function computeInsights(userId, currentPayload) {
   };
 }
 
-// ---------------- CREATE RECORD ----------------
 async function createRecord(userId, payload) {
-  // Generate condition based on data
   let condition = "General Health Check";
   if (payload.stressLevel >= 8) condition = "High Stress Management";
   if (payload.sleepHours < 6) condition = "Sleep Optimization";
   if (payload.testosteroneLevel && payload.testosteroneLevel < 3) condition = "Hormone Balance";
   if (payload.workoutDays >= 5) condition = "Active Lifestyle";
 
-  // Generate description
   const description = `Health check: Stress ${payload.stressLevel || 0}/10, Sleep ${payload.sleepHours || 0}hrs, Workout ${payload.workoutDays || 0} days/week, Energy ${payload.energyLevel || 0}/10`;
 
-  // 1️⃣ Save raw record first
   const record = new MenHealth({ 
     userId, 
     condition,
     description,
     date: new Date(),
-    ...payload  // Spread all other fields
+    ...payload 
   });
   await record.save();
 
-  // 2️⃣ Compute analysis using current payload
   const analysis = await computeInsights(userId, payload);
 
-  // 3️⃣ Generate AI tip
   const aiTip = await generateSmartHealthTip({
     category: "men's health",
     userData: payload,
     context: "Focus on energy, testosterone, stress, and daily activity.",
   });
 
-  // 4️⃣ Attach analysis + aiTip to record and save again
   record.analysis = analysis;
   record.aiTip = aiTip;
   await record.save();
@@ -101,7 +90,6 @@ async function createRecord(userId, payload) {
   return record;
 }
 
-// Export service functions remain the same
 async function getRecords(userId, { page = 1, limit = 20 }) {
   const skip = (page - 1) * limit;
   const records = await MenHealth.find({ userId })
@@ -117,7 +105,6 @@ async function getRecordById(userId, id) {
 }
 
 async function updateRecord(userId, id, data) {
-  // Step 1: Update main fields
   const updated = await MenHealth.findOneAndUpdate(
     { _id: id, userId },
     data,
@@ -125,7 +112,6 @@ async function updateRecord(userId, id, data) {
   );
   if (!updated) return null;
 
-  // Step 2: Recompute insights and AI tip using latest data
   const analysis = await computeInsights(userId, updated);
   const aiTip = await generateSmartHealthTip({
     category: "men's health",
@@ -133,7 +119,6 @@ async function updateRecord(userId, id, data) {
     context: "Focus on energy, testosterone, stress, and daily activity."
   });
 
-  // Step 3: Save both updates
   updated.analysis = analysis;
   updated.aiTip = aiTip;
   await updated.save();

@@ -25,7 +25,6 @@ const nutritionSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
 });
 
-// Add index for faster queries
 nutritionSchema.index({ userId: 1, createdAt: -1 });
 
 module.exports = mongoose.model("Nutrition", nutritionSchema);

@@ -16,7 +16,7 @@ const createInsight = async (req, res) => {
     const insight = await generateInsight(userId, category, data);
     res.status(201).json({ message: "Insight generated", insight });
   } catch (err) {
-    console.error("❌ createInsight error:", err);
+    console.error("createInsight error:", err);
     res.status(500).json({ error: err.message });
   }
 };
@@ -27,7 +27,7 @@ const fetchInsights = async (req, res) => {
     const insights = await getUserInsights(userId);
     res.status(200).json(insights);
   } catch (err) {
-    console.error("❌ fetchInsights error:", err);
+    console.error("fetchInsights error:", err);
     res.status(500).json({ error: err.message });
   }
 };
@@ -39,7 +39,7 @@ const fetchAInsights = async (req, res) => {
     const insights = await LabInsights.findOne({ _id: insightId, userId });
     res.status(200).json(insights);
   } catch (err) {
-    console.error("❌ fetchAInsights error:", err);
+    console.error("fetchAInsights error:", err);
     res.status(500).json({ error: err.message });
   }
 };
@@ -51,7 +51,7 @@ const getDashboardInsights = async (req, res) => {
     
     // Get real weekly data
     const weeklyData = await getUserWeeklyData(userId);
-    console.log(`✅ Weekly data loaded: Sleep: ${weeklyData.details.sleep.length}, Fitness: ${weeklyData.details.fitness.length}`);
+    console.log(`Weekly data loaded: Sleep: ${weeklyData.details.sleep.length}, Fitness: ${weeklyData.details.fitness.length}`);
     
     // Get recent insights
     const insights = await LabInsights.find({ userId }).sort({ createdAt: -1 }).limit(10);
@@ -71,12 +71,11 @@ const getDashboardInsights = async (req, res) => {
       aiSummary: Array.isArray(aiSummary) ? aiSummary.join(' ') : aiSummary
     });
   } catch (err) {
-    console.error("❌ getDashboardInsights error:", err);
+    console.error("getDashboardInsights error:", err);
     res.status(500).json({ error: err.message });
   }
 };
 
-// Generate weekly report endpoint
 const generateWeeklyReport = async (req, res) => {
   try {
     const userId = req.userId;
@@ -98,7 +97,7 @@ const generateWeeklyReport = async (req, res) => {
       });
     }
   } catch (err) {
-    console.error("❌ generateWeeklyReport error:", err);
+    console.error("generateWeeklyReport error:", err);
     res.status(500).json({ 
       success: false, 
       message: err.message 
@@ -106,20 +105,18 @@ const generateWeeklyReport = async (req, res) => {
   }
 };
 
-// File download endpoint
 const downloadWeeklyReport = async (req, res) => {
   try {
     const userId = req.userId;
     const { filename } = req.params;
     
-    console.log("📥 Download request:", { userId, filename });
+    console.log("Download request:", { userId, filename });
     
-    // Option 1: Download specific file by filename
     if (filename) {
       const REPORT_DIR = path.join(__dirname, "../../../modules/report/generated");
       const filePath = path.join(REPORT_DIR, filename);
       
-      console.log("📁 Looking for file:", filePath);
+      console.log("Looking for file:", filePath);
       
       if (!fs.existsSync(filePath)) {
         return res.status(404).json({ 
@@ -127,12 +124,10 @@ const downloadWeeklyReport = async (req, res) => {
           message: "Report file not found. Please generate a new report first." 
         });
       }
-      
-      // Set proper headers for PDF download
+    
       res.setHeader('Content-Type', 'application/pdf');
       res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
       
-      // Stream the file
       const fileStream = fs.createReadStream(filePath);
       fileStream.pipe(res);
       
@@ -143,29 +138,25 @@ const downloadWeeklyReport = async (req, res) => {
       
       return;
     }
-    
-    // Option 2: No filename provided - generate or find recent report
-    console.log("🔄 No filename provided, checking for existing reports...");
+   
+    console.log("No filename provided, checking for existing reports...");
     
     const REPORT_DIR = path.join(__dirname, "../../../modules/report/generated");
     if (!fs.existsSync(REPORT_DIR)) {
       fs.mkdirSync(REPORT_DIR, { recursive: true });
     }
     
-    // Look for existing user reports
     const userReportPattern = new RegExp(`Weekly_Report_${userId}_`);
     const files = fs.readdirSync(REPORT_DIR).filter(f => 
       f.endsWith('.pdf') && userReportPattern.test(f)
     );
     
-    // If user has existing reports, use the latest one
     if (files.length > 0) {
-      // Sort by date (newest first)
       files.sort().reverse();
       const latestReport = files[0];
       const filePath = path.join(REPORT_DIR, latestReport);
       
-      console.log("📄 Using existing report:", latestReport);
+      console.log("Using existing report:", latestReport);
       
       res.setHeader('Content-Type', 'application/pdf');
       res.setHeader('Content-Disposition', `attachment; filename="${latestReport}"`);
@@ -181,8 +172,7 @@ const downloadWeeklyReport = async (req, res) => {
       return;
     }
     
-    // No existing report, generate a new one
-    console.log("⚡ No existing report found, generating new weekly report...");
+    console.log("No existing report found, generating new weekly report...");
     const report = await generateUserWeeklyReport(userId);
     
     if (!report.success) {
@@ -192,7 +182,6 @@ const downloadWeeklyReport = async (req, res) => {
       });
     }
     
-    // Stream the newly generated report
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', `attachment; filename="${report.fileName}"`);
     
@@ -205,7 +194,7 @@ const downloadWeeklyReport = async (req, res) => {
     });
     
   } catch (err) {
-    console.error("❌ Error in downloadWeeklyReport:", err.message);
+    console.error("Error in downloadWeeklyReport:", err.message);
     console.error(err.stack);
     res.status(500).json({ 
       success: false, 

@@ -74,7 +74,6 @@ const CommunityPostSchema = new mongoose.Schema(
   }
 );
 
-// Pre-save middleware to ensure likes is always an array
 CommunityPostSchema.pre('save', function(next) {
   if (this.likes && typeof this.likes === 'number') {
     this.likes = [];
@@ -85,22 +84,18 @@ CommunityPostSchema.pre('save', function(next) {
   next();
 });
 
-// Indexes for better query performance
 CommunityPostSchema.index({ createdAt: -1 });
 CommunityPostSchema.index({ userId: 1 });
 CommunityPostSchema.index({ 'likes': 1 });
 
-// Virtual for likes count
 CommunityPostSchema.virtual('likesCount').get(function() {
   return this.likes ? this.likes.length : 0;
 });
 
-// Virtual for engagement score
 CommunityPostSchema.virtual('engagementScore').get(function() {
   return (this.likes?.length || 0) + (this.comments?.length || 0);
 });
 
-// Ensure virtuals are included when converting to JSON
 CommunityPostSchema.set('toJSON', { virtuals: true });
 CommunityPostSchema.set('toObject', { virtuals: true });
 

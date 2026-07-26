@@ -5,8 +5,8 @@ const createPregnancyValidator = (req, res, next) => {
     userId: Joi.string().required(),
     conceptionDate: Joi.date().required(),
      week: Joi.number().min(1).max(42).required(),
-     dueDate: Joi.date().required(),       // ADD THIS
-    currentWeek: Joi.number().min(1).max(42).required(), // ADD THIS
+     dueDate: Joi.date().required(),
+    currentWeek: Joi.number().min(1).max(42).required(),
     notes: Joi.string().allow("").optional(),
     symptoms: Joi.array().items(Joi.string()).default([]),
     emotion: Joi.string().allow("").optional(),

@@ -9,16 +9,14 @@ class CycleAnalysis {
         status: "Insufficient",
       };
 
-    // Sort cycles by start date (newest first)
     cycles.sort((a, b) => new Date(b.startDate) - new Date(a.startDate));
 
-    // Calculate cycle lengths based on gap between start dates
     const lengths = [];
     for (let i = 0; i < cycles.length - 1; i++) {
       const diff =
         (new Date(cycles[i].startDate) - new Date(cycles[i + 1].startDate)) /
         (1000 * 60 * 60 * 24);
-      if (diff > 10 && diff < 50) lengths.push(diff); // filter unrealistic values
+      if (diff > 10 && diff < 50) lengths.push(diff); 
     }
 
     const avgLength =
@@ -35,7 +33,6 @@ class CycleAnalysis {
     const lastCycle = cycles[0];
     const predictedNext = calculateNextCycle(lastCycle.startDate, avgLength);
 
-    // 🔹 Generate AI Tip with all data
     const tip = generateSmartHealthTip({
       category: "Cycle",
       userData: { 
@@ -54,7 +51,6 @@ class CycleAnalysis {
     if (irregularities > 2) status = "Irregular";
     else if (irregularities > 0) status = "Monitor";
 
-    // 🔹 Build human-readable summary
     const summary = isRegular
       ? "Your cycle appears regular. Great job maintaining consistency!"
       : "Some irregularities detected. Consider tracking more closely or consulting a professional.";

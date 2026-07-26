@@ -3,18 +3,13 @@ const CommunityPost = require("../models/communityPost.model");
 const { generateCommunityInsight } = require("../ai/ai.helper");
 const { analyzeEngagement } = require("./communityPost.analysis");
 
-/**
- * Create a new post
- */
 const createPost = async (userId, data) => {
   try {
     const aiInsight = await generateCommunityInsight(data.content);
     const post = await CommunityPost.create({ ...data, userId, aiInsight });
     
-    // Populate user data before returning
     await post.populate('userId', 'name email userName');
     
-    // Format post
     const formattedPost = {
       _id: post._id,
       content: post.content,
@@ -36,19 +31,15 @@ const createPost = async (userId, data) => {
     
     return formattedPost;
   } catch (error) {
-    console.error('❌ Error in createPost service:', error);
+    console.error('Error in createPost service:', error);
     throw error;
   }
 };
 
-/**
- * Get all posts (latest first) - VISIBLE TO ALL USERS
- */
 const getAllPosts = async () => {
   try {
-    console.log('📡 Fetching all posts from database...');
+    console.log('Fetching all posts from database...');
     
-    // Get posts with population directly
     const posts = await CommunityPost.find()
       .populate('userId', 'name email userName')
       .populate('comments.userId', 'name email userName')
@@ -56,11 +47,9 @@ const getAllPosts = async () => {
       .sort({ createdAt: -1 })
       .lean();
     
-    console.log(`📊 Found ${posts.length} posts`);
+    console.log(`Found ${posts.length} posts`);
     
-    // Transform posts to ensure correct data structure
     const transformedPosts = posts.map(post => {
-      // Ensure likes is always an array and clean it
       let likesArray = [];
       if (Array.isArray(post.likes)) {
         likesArray = post.likes.filter(like => 
@@ -68,7 +57,6 @@ const getAllPosts = async () => {
         );
       }
       
-      // Ensure comments are properly formatted
       const commentsArray = Array.isArray(post.comments) ? post.comments.map(comment => ({
         _id: comment._id,
         text: comment.text,
@@ -101,13 +89,11 @@ const getAllPosts = async () => {
       };
     });
     
-    console.log(`✅ Returning ${transformedPosts.length} posts`);
+    console.log(`Returning ${transformedPosts.length} posts`);
     return transformedPosts;
     
   } catch (error) {
-    console.error('❌ Error in getAllPosts service:', error.message);
-    
-    // Fallback: return posts without population
+    console.error('Error in getAllPosts service:', error.message);
     try {
       const fallbackPosts = await CommunityPost.find().sort({ createdAt: -1 }).lean();
       return fallbackPosts.map(post => ({
@@ -119,7 +105,7 @@ const getAllPosts = async () => {
         userId: post.userId ? { _id: post.userId, name: 'User', email: '' } : null
       }));
     } catch (fallbackError) {
-      console.error('❌ Fallback also failed:', fallbackError.message);
+      console.error('Fallback also failed:', fallbackError.message);
       return [];
     }
   }

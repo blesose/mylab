@@ -49,7 +49,6 @@ class CycleService {
   }
 }
 
-// Update the AI helper function to use all fields
 async function getCycleHealthTip(userData) {
   return await generateSmartHealthTip({
     category: "Female Cycle Health",

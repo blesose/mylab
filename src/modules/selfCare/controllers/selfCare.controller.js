@@ -34,7 +34,7 @@ const addSelfCare = async (req, res) => {
 
 const fetchAllSelfCareActivities = async (req, res) => {
   try {
-    const userId = req.userId; // ✅ just assign directly
+    const userId = req.userId;
     const data = await getAllSelfCareActivities(userId);
 
     res.status(200).json({
@@ -48,10 +48,6 @@ const fetchAllSelfCareActivities = async (req, res) => {
   }
 };
 
-// module.exports = { addSelfCare };
-/**
- * 📖 READ: Fetch all self-care activities for a user
- */
 const fetchSelfCareActivities = async (req, res) => {
   try {
     const  userId  = req.userId;
@@ -92,14 +88,13 @@ const updateSelfCare = async (req, res) => {
       ...updates,
     };
 
-    // Always run analysis and generate AI tip
+    // run analysis and generate AI tip
     const analysis = analyzeSelfCare(
       merged.duration,
       merged.moodBefore,
       merged.moodAfter
     );
 
-    // Use updated AI helper that handles number moods
     const aiTipData = getSmartSelfCareTip({
       activityType: merged.activityType,
       duration: merged.duration,
@@ -108,7 +103,7 @@ const updateSelfCare = async (req, res) => {
     });
 
     // Create richer AI tip
-    merged.aiTip = `🧠 ${aiTipData.tip}\n\n✨ ${analysis.message}\n\n💡 Mood Insight: ${aiTipData.summary}`;
+    merged.aiTip = ` ${aiTipData.tip}\n\n✨ ${analysis.message}\n\n Mood Insight: ${aiTipData.summary}`;
 
     // Save updated record
     const updated = await SelfCare.findByIdAndUpdate(activitiesId, merged, {

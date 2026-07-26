@@ -6,7 +6,6 @@ const createCycle = async (req, res) => {
       startDate, 
       endDate, 
       notes,
-      // New fields
       flowLevel,
       symptoms,
       mood,
@@ -20,7 +19,6 @@ const createCycle = async (req, res) => {
       startDate, 
       endDate, 
       notes,
-      // Pass new fields to service
       flowLevel,
       symptoms,
       mood,

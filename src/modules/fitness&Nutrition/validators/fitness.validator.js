@@ -8,7 +8,7 @@ const fitnessValidator = (req, res, next) => {
     frequency: Joi.number().min(1).max(7).required(),
     goal: Joi.string()
       .valid("weight_loss", "muscle_gain", "endurance", "flexibility", "general_health")
-      .required(), // ADD THIS
+      .required(),
   });
 
   const { error } = schema.validate(req.body);

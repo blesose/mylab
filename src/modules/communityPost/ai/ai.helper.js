@@ -1,34 +1,10 @@
-// /**
-//  * Generate AI insight for post content
-//  */
-// async function generateCommunityInsight(content) {
-//   // Here we simulate AI processing
-//   if (content.length > 200) return "Long-form post with detailed insight 📝";
-//   if (content.toLowerCase().includes("help")) return "Post may need community advice 🤝";
-//   return "General post insight 🌟";
-// }
 
-// /**
-//  * Generate reaction tip based on likes/comments
-//  */
-// function generateReactionInsight(likes, comments) {
-//   if (likes > 50) return "Post is trending! 🚀";
-//   if (comments > 20) return "High discussion on this post 💬";
-//   return "Keep engaging with your community 🤗";
-// }
-
-// module.exports = { generateCommunityInsight, generateReactionInsight };
-
-
-
-/**
- * Generate AI insight for community posts based on content
- * @param {string} content - The post content
- * @returns {Promise<string>} - AI generated insight
- */
+  // Generate AI insight for community posts based on content
+  // @param {string} content - The post content
+  // @returns {Promise<string>} - AI generated insight
+ 
 async function generateCommunityInsight(content) {
   try {
-    // Check content length and type
     const contentLength = content.length;
     const lowercaseContent = content.toLowerCase();
     
@@ -59,7 +35,6 @@ async function generateCommunityInsight(content) {
       insight = "Thank you for contributing to our community! Your voice matters. 🌟";
     }
     
-    // Add random emoji for personal touch
     const emojis = ['💪', '🧠', '❤️', '🌱', '✨', '🌟', '💫', '🦋'];
     const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
     
@@ -70,17 +45,16 @@ async function generateCommunityInsight(content) {
   }
 }
 
-/**
- * Generate reaction insight based on likes and comments count
- * @param {number} likes - Number of likes on the post
- * @param {number} comments - Number of comments on the post
- * @returns {string} - Reaction insight/tip
- */
+
+  // Generate reaction insight based on likes and comments count
+  // @param {number} likes - Number of likes on the post
+  // @param {number} comments - Number of comments on the post
+  // @returns {string} - Reaction insight/tip
+
 function generateReactionInsight(likes, comments) {
   try {
     const totalEngagement = (likes || 0) + (comments || 0);
     
-    // Different insights based on engagement levels
     if (totalEngagement === 0) {
       const tips = [
         "Be the first to engage with this post! 💬",
@@ -113,7 +87,7 @@ function generateReactionInsight(likes, comments) {
         "❤️ Your post is resonating with many community members!",
         "⭐ Strong engagement! Keep sharing your journey.",
         "🌟 Your story is touching hearts!",
-        "💪 Your post is inspiring others to engage!"
+        "Your post is inspiring others to engage!"
       ];
       return tips[Math.floor(Math.random() * tips.length)];
     }
@@ -144,27 +118,27 @@ function generateReactionInsight(likes, comments) {
   }
 }
 
-/**
- * Generate analysis insight for post statistics
- * @param {Object} analysisData - Post analysis data
- * @returns {string} - Analysis insight
- */
+
+  // Generate analysis insight for post statistics
+  // @param {Object} analysisData - Post analysis data
+  // @returns {string} - Analysis insight
+ 
 function generateAnalysisInsight(analysisData) {
   try {
     const { totalPosts, totalLikes, totalComments, avgLikes, avgComments } = analysisData;
     
     if (totalPosts === 0) {
-      return "No posts yet. Be the first to share your journey! 🌟";
+      return "No posts yet. Be the first to share your journey!";
     }
     
     if (avgLikes > 10) {
-      return `High engagement! Average ${Math.round(avgLikes)} likes per post. 🔥`;
+      return `High engagement! Average ${Math.round(avgLikes)} likes per post.`;
     } else if (avgComments > 5) {
-      return `Active discussions! Average ${Math.round(avgComments)} comments per post. 💬`;
+      return `Active discussions! Average ${Math.round(avgComments)} comments per post.`;
     } else if (totalPosts > 10) {
-      return `Growing community with ${totalPosts} posts! Keep sharing! 📈`;
+      return `Growing community with ${totalPosts} posts! Keep sharing!`;
     } else {
-      return `Building community engagement one post at a time! 🌱`;
+      return `Building community engagement one post at a time!`;
     }
   } catch (error) {
     console.error('Error generating analysis insight:', error);

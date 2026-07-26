@@ -1,32 +1,25 @@
-  // ai.helper.js
-  // Central AI-like helper module for generating smart insights and wellness tips.
-  // Handles both female and male health use cases.
-
-
 const OpenAI = require("openai"); // Optional if you plan real AI API calls later
 // const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-// ----- GENERIC SMART TIP FUNCTION -----
+
 async function generateSmartHealthTip({ category, userData = {}, context = "" }) {
   try {
-    // Here you could later replace this with an AI API call (OpenAI, Gemini, etc.)
-    // For now, we use lightweight rule-based logic for local dev.
+    
+    
 
     const name = userData?.name || "Friend";
 
     switch (category.toLowerCase()) {
-      // FEMALE HEALTH (Already Exists)
+
       case "female health":
       case "women's health":
       case "pregnancy":
         return `Hey ${name}, keep maintaining hydration and rest — your body’s doing great. Remember to eat folate-rich foods and monitor your energy. 💖`;
 
-      // MEN'S HEALTH
       case "men's health":
       case "male health":
         return generateMensHealthTip(userData, context);
 
-      // FALLBACK
       default:
         return `Hey ${name}, prioritize your well-being today — small habits build lifelong health.`;
     }
@@ -36,7 +29,7 @@ async function generateSmartHealthTip({ category, userData = {}, context = "" })
   }
 }
 
-// ----- MEN’S HEALTH LOGIC -----
+
 function generateMensHealthTip(userData, context) {
   const stress = userData?.stressLevel || 0;
   const sleep = userData?.sleepHours || 0;

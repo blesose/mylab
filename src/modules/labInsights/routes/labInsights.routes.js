@@ -1,394 +1,290 @@
 const express = require("express");
 const labinsightRouter = express.Router();
 const { authMiddleware } = require("../../../middleware/auth.middleware");
-const { 
-  createInsight, 
-  fetchInsights, 
-  getDashboardInsights, 
+const {
+  createInsight,
+  fetchInsights,
+  getDashboardInsights,
   downloadWeeklyReport,
   fetchAInsights,
   generateWeeklyReport
 } = require("../controllers/labInsights.controller");
 
-// ====== CORE ROUTES ======
+/**
+ * @swagger
+ * /api/labinsights/lab/create:
+ *   post:
+ *     summary: Create a lab insight
+ *     description: Generate AI insights from health data
+ *     tags: [Lab Insights]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: "#/components/schemas/CreateInsightRequest"
+ *           example:
+ *             category: "fitness"
+ *             data: [75, 82, 68, 90, 78]
+ *     responses:
+ *       201:
+ *         description: Insight generated
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 insight:
+ *                   $ref: "#/components/schemas/LabInsight"
+ *       400:
+ *         description: Validation error
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Server error
+ */
 labinsightRouter.post("/create", authMiddleware, createInsight);
+
+/**
+ * @swagger
+ * /api/labinsights/lab/all:
+ *   get:
+ *     summary: Get all insights
+ *     description: Retrieve all lab insights for the authenticated user
+ *     tags: [Lab Insights]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Insights retrieved
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: "#/components/schemas/LabInsight"
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Server error
+ */
 labinsightRouter.get("/all", authMiddleware, fetchInsights);
+
+/**
+ * @swagger
+ * /api/labinsights/lab/a/{insightId}:
+ *   get:
+ *     summary: Get a single insight
+ *     description: Retrieve a specific lab insight by ID
+ *     tags: [Lab Insights]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: insightId
+ *         required: true
+ *         schema:
+ *           type: string
+ *           pattern: ^[0-9a-fA-F]{24}$
+ *         description: Insight ID
+ *         example: "507f1f77bcf86cd799439601"
+ *     responses:
+ *       200:
+ *         description: Insight retrieved
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: "#/components/schemas/LabInsight"
+ *       404:
+ *         description: Insight not found
+ *       401:
+ *         description: Unauthorized
+ */
 labinsightRouter.get("/a/:insightId", authMiddleware, fetchAInsights);
+
+/**
+ * @swagger
+ * /api/labinsights/lab/dashboard:
+ *   get:
+ *     summary: Get dashboard insights
+ *     description: Get comprehensive dashboard insights including weekly summary, recent insights, and AI summary
+ *     tags: [Lab Insights]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Dashboard insights retrieved
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: "#/components/schemas/DashboardInsights"
+ *             example:
+ *               weeklySummary:
+ *                 totalSleepHours: 49.5
+ *                 avgSleepQuality: 7.2
+ *                 totalWorkouts: 4
+ *                 totalSelfCare: 7
+ *                 totalPosts: 3
+ *               recentInsights:
+ *                 - _id: "507f1f77bcf86cd799439601"
+ *                   category: "fitness"
+ *                   summary: "Average score: 78.60 based on 5 records"
+ *               aiSummary: ["Stay consistent with your workouts", "Maintain a consistent bedtime"]
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Server error
+ */
 labinsightRouter.get("/dashboard", authMiddleware, getDashboardInsights);
+
+/**
+ * @swagger
+ * /api/labinsights/lab/weekly-report/generate:
+ *   post:
+ *     summary: Generate weekly report
+ *     description: Generate a PDF weekly health report
+ *     tags: [Lab Insights]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Report generated
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: "#/components/schemas/WeeklyReport"
+ *             example:
+ *               success: true
+ *               message: "Weekly report generated successfully"
+ *               downloadUrl: "/api/labinsights/lab/weekly-report/download/Weekly_Report_507f1f77bcf86cd799439011_2026-07-26.pdf"
+ *               summary:
+ *                 totalSleepHours: 49.5
+ *                 avgSleepQuality: 7.2
+ *                 totalWorkouts: 4
+ *                 totalSelfCare: 7
+ *                 totalPosts: 3
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Server error
+ */
 labinsightRouter.post("/weekly-report/generate", authMiddleware, generateWeeklyReport);
+
+/**
+ * @swagger
+ * /api/labinsights/lab/weekly-report/download:
+ *   get:
+ *     summary: Download weekly report
+ *     description: Download the latest weekly health report PDF
+ *     tags: [Lab Insights]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: filename
+ *         schema:
+ *           type: string
+ *         description: Specific report filename (optional)
+ *         example: "Weekly_Report_507f1f77bcf86cd799439011_2026-07-26.pdf"
+ *     responses:
+ *       200:
+ *         description: PDF file downloaded
+ *         content:
+ *           application/pdf:
+ *             schema:
+ *               type: string
+ *               format: binary
+ *       404:
+ *         description: Report not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: "#/components/schemas/ErrorResponse"
+ *             example:
+ *               success: false
+ *               message: "Report file not found. Please generate a new report first."
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Server error
+ */
 labinsightRouter.get("/weekly-report/download", authMiddleware, downloadWeeklyReport);
+
+/**
+ * @swagger
+ * /api/labinsights/lab/weekly-report/download/{filename}:
+ *   get:
+ *     summary: Download weekly report by filename
+ *     description: Download a specific weekly health report PDF by filename
+ *     tags: [Lab Insights]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: filename
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Report filename
+ *         example: "Weekly_Report_507f1f77bcf86cd799439011_2026-07-26.pdf"
+ *     responses:
+ *       200:
+ *         description: PDF file downloaded
+ *         content:
+ *           application/pdf:
+ *             schema:
+ *               type: string
+ *               format: binary
+ *       404:
+ *         description: Report not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: "#/components/schemas/ErrorResponse"
+ *             example:
+ *               success: false
+ *               message: "Report file not found. Please generate a new report first."
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Server error
+ */
 labinsightRouter.get("/weekly-report/download/:filename", authMiddleware, downloadWeeklyReport);
 
-// Add debug middleware to log all requests
-labinsightRouter.use((req, res, next) => {
-  console.log(`📡 [LabInsights] ${req.method} ${req.originalUrl}`);
-  next();
-});
-
-// ====== REAL DATA COLLECTION ======
-labinsightRouter.post("/collect-real-data", authMiddleware, async (req, res) => {
-  try {
-    const { generateInsight, getUserWeeklyData } = require("../services/labInsights.service");
-    
-    const userId = req.userId;
-    const { category } = req.body;
-    
-    if (!category) {
-      return res.status(400).json({ 
-        success: false,
-        error: "Category is required. Options: sleepRecovery, fitness, nutrition, selfCare, community" 
-      });
-    }
-    
-    console.log(`\n📊 [collect-real-data] Starting for user ${userId}, category: ${category}`);
-    
-    // Get weekly data
-    const weeklyData = await getUserWeeklyData(userId);
-    
-    let realData = [];
-    let recordCount = 0;
-    
-    // Extract data based on category
-    switch (category) {
-      case 'sleepRecovery':
-        recordCount = weeklyData.details.sleep?.length || 0;
-        if (recordCount > 0) {
-          realData = weeklyData.details.sleep.map(record => 
-            record.sleepQuality || record.quality || 5
-          );
-          console.log(`✅ Extracted ${recordCount} sleep quality values:`, realData);
-        }
-        break;
-        
-      case 'fitness':
-        recordCount = weeklyData.details.fitness?.length || 0;
-        if (recordCount > 0) {
-          realData = weeklyData.details.fitness.map(record => 
-            record.duration || record.intensityValue || 0
-          );
-        }
-        break;
-        
-      case 'nutrition':
-        recordCount = weeklyData.details.nutrition?.length || 0;
-        if (recordCount > 0) {
-          realData = weeklyData.details.nutrition.map(record => 
-            record.calories || record.nutritionScore || record.rating || 0
-          );
-        }
-        break;
-        
-      case 'selfCare':
-        recordCount = weeklyData.details.selfCare?.length || 0;
-        if (recordCount > 0) {
-          realData = weeklyData.details.selfCare.map(record => 
-            record.moodScore || record.duration || 0
-          );
-        }
-        break;
-        
-      case 'community':
-        recordCount = weeklyData.details.community?.length || 0;
-        if (recordCount > 0) {
-          realData = Array(recordCount).fill(1);
-        }
-        break;
-        
-      default:
-        return res.status(400).json({
-          success: false,
-          message: `Unsupported category: ${category}`
-        });
-    }
-    
-    // Check if we have data
-    if (recordCount === 0) {
-      return res.status(404).json({
-        success: false,
-        message: `No ${category} records found for this user.`,
-        suggestion: `Create ${category} records first.`
-      });
-    }
-    
-    // Generate insight
-    const insight = await generateInsight(userId, category, realData);
-    
-    res.json({
-      success: true,
-      message: `Created insight from ${recordCount} real ${category} records`,
-      insight: {
-        id: insight._id,
-        category: insight.category,
-        summary: insight.summary,
-        aiGeneratedTips: insight.aiGeneratedTips,
-        createdAt: insight.createdAt
-      },
-      dataSummary: {
-        recordCount,
-        average: (realData.reduce((a, b) => a + b, 0) / realData.length).toFixed(2),
-        dataSample: realData.slice(0, 5)
-      }
-    });
-    
-  } catch (error) {
-    console.error("❌ Error in collect-real-data:", error.message);
-    res.status(500).json({
-      success: false,
-      error: error.message
-    });
-  }
-});
-
-// Add this new endpoint to your routes file
-labinsightRouter.post("/collect-alltime-data", authMiddleware, async (req, res) => {
-  try {
-    const { generateInsight, getUserAllTimeData } = require("../services/labInsights.service");
-    
-    const userId = req.userId;
-    const { category } = req.body;
-    
-    if (!category) {
-      return res.status(400).json({ 
-        success: false,
-        error: "Category is required. Options: sleepRecovery, fitness, nutrition, selfCare, community" 
-      });
-    }
-    
-    console.log(`\n📊 [collect-alltime-data] Starting for user ${userId}, category: ${category}`);
-    
-    // Get ALL TIME data (not just 7 days)
-    const allTimeData = await getUserAllTimeData(userId);
-    
-    let realData = [];
-    let recordCount = 0;
-    
-    // Extract data based on category
-    switch (category) {
-      case 'sleepRecovery':
-        recordCount = allTimeData.details.sleep?.length || 0;
-        if (recordCount > 0) {
-          realData = allTimeData.details.sleep.map(record => 
-            record.sleepQuality || record.quality || 5
-          );
-          console.log(`✅ Extracted ${recordCount} sleep quality values from all time`);
-        }
-        break;
-        
-      case 'fitness':
-        recordCount = allTimeData.details.fitness?.length || 0;
-        if (recordCount > 0) {
-          realData = allTimeData.details.fitness.map(record => 
-            record.duration || record.intensityValue || 0
-          );
-        }
-        break;
-        
-      case 'nutrition':
-        recordCount = allTimeData.details.nutrition?.length || 0;
-        if (recordCount > 0) {
-          realData = allTimeData.details.nutrition.map(record => 
-            record.calories || record.nutritionScore || record.rating || 0
-          );
-        }
-        break;
-        
-      case 'selfCare':
-        recordCount = allTimeData.details.selfCare?.length || 0;
-        if (recordCount > 0) {
-          realData = allTimeData.details.selfCare.map(record => 
-            record.moodScore || record.duration || 0
-          );
-        }
-        break;
-        
-      case 'community':
-        recordCount = allTimeData.details.community?.length || 0;
-        if (recordCount > 0) {
-          realData = allTimeData.details.community.map(record => 
-            record.likes || record.comments || 1
-          );
-        }
-        break;
-        
-      default:
-        return res.status(400).json({
-          success: false,
-          message: `Unsupported category: ${category}`
-        });
-    }
-    
-    // Check if we have data
-    if (recordCount === 0) {
-      return res.status(404).json({
-        success: false,
-        message: `No ${category} records found for this user in your entire history.`,
-        suggestion: `Start tracking ${category} activities to build your history.`
-      });
-    }
-    
-    // Generate insight from ALL TIME data
-    const insight = await generateInsight(userId, category, realData);
-    
-    res.json({
-      success: true,
-      message: `Created insight from ${recordCount} ${category} records (ALL TIME)`,
-      timePeriod: "All time (entire history)",
-      insight: {
-        id: insight._id,
-        category: insight.category,
-        summary: insight.summary,
-        aiGeneratedTips: insight.aiGeneratedTips,
-        createdAt: insight.createdAt
-      },
-      dataSummary: {
-        recordCount,
-        timeRange: `From ${allTimeData.timeRange?.oldest || 'unknown'} to ${allTimeData.timeRange?.newest || 'now'}`,
-        average: (realData.reduce((a, b) => a + b, 0) / realData.length).toFixed(2),
-        min: Math.min(...realData),
-        max: Math.max(...realData),
-        dataSample: realData.slice(0, 5)
-      }
-    });
-    
-  } catch (error) {
-    console.error("❌ Error in collect-alltime-data:", error.message);
-    res.status(500).json({
-      success: false,
-      error: error.message
-    });
-  }
-});
-
-// ====== VERIFICATION ROUTES ======
-labinsightRouter.get("/verify-insights", authMiddleware, async (req, res) => {
-  try {
-    const { getUserInsights, getUserWeeklyData } = require("../services/labInsights.service");
-    
-    const userId = req.userId;
-    const insights = await getUserInsights(userId);
-    const weeklyData = await getUserWeeklyData(userId);
-    
-    const verifiedInsights = insights.map(insight => {
-      let actualRecordCount = 0;
-      
-      switch(insight.category) {
-        case 'sleepRecovery':
-          actualRecordCount = weeklyData.details.sleep?.length || 0;
-          break;
-        case 'fitness':
-          actualRecordCount = weeklyData.details.fitness?.length || 0;
-          break;
-        case 'nutrition':
-          actualRecordCount = weeklyData.details.nutrition?.length || 0;
-          break;
-        case 'selfCare':
-          actualRecordCount = weeklyData.details.selfCare?.length || 0;
-          break;
-        case 'community':
-          actualRecordCount = weeklyData.details.community?.length || 0;
-          break;
-      }
-      
-      const match = insight.summary.match(/based on (\d+) records?/);
-      const claimedRecords = match ? parseInt(match[1]) : 0;
-      
-      return {
-        insightId: insight._id,
-        category: insight.category,
-        summary: insight.summary,
-        claimedRecords,
-        actualRecords: actualRecordCount,
-        hasRealData: actualRecordCount > 0,
-        isAccurate: claimedRecords <= actualRecordCount
-      };
-    });
-    
-    res.json({
-      success: true,
-      userId,
-      insights: verifiedInsights
-    });
-    
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: error.message
-    });
-  }
-});
-
-// ====== DEBUG ROUTES ======
-labinsightRouter.get("/debug/data-sources", authMiddleware, async (req, res) => {
-  try {
-    const { debugDataSources } = require("../services/labInsights.service");
-    const result = await debugDataSources(req.userId);
-    
-    res.json({
-      success: true,
-      userId: req.userId,
-      message: "Debug info logged to console",
-      result
-    });
-    
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: error.message
-    });
-  }
-});
-
-// ====== ACTIVITY STATS ======
-labinsightRouter.get("/activity-stats", authMiddleware, async (req, res) => {
-  try {
-    const { getUserWeeklyData } = require("../services/labInsights.service");
-    const weeklyData = await getUserWeeklyData(req.userId);
-    
-    // Log for debugging
-    console.log(`\n📊 [activity-stats] for user ${req.userId}:`);
-    console.log(`   Sleep records: ${weeklyData.details.sleep?.length || 0}`);
-    console.log(`   Fitness records: ${weeklyData.details.fitness?.length || 0}`);
-    console.log(`   Nutrition records: ${weeklyData.details.nutrition?.length || 0}`);
-    console.log(`   Self-care records: ${weeklyData.details.selfCare?.length || 0}`);
-    console.log(`   Community records: ${weeklyData.details.community?.length || 0}`);
-    
-    res.json({
-      success: true,
-      userId: req.userId,
-      period: "Last 7 days",
-      summary: weeklyData.summary,
-      recordCounts: {
-        sleep: weeklyData.details.sleep?.length || 0,
-        fitness: weeklyData.details.fitness?.length || 0,
-        nutrition: weeklyData.details.nutrition?.length || 0,
-        selfCare: weeklyData.details.selfCare?.length || 0,
-        community: weeklyData.details.community?.length || 0
-      }
-    });
-    
-  } catch (error) {
-    console.error("❌ Error in activity-stats:", error.message);
-    res.status(500).json({
-      success: false,
-      error: error.message
-    });
-  }
-});
-
-// ====== TEST ENDPOINTS ======
+/**
+ * @swagger
+ * /api/labinsights/lab/test:
+ *   get:
+ *     summary: Test lab insights endpoint
+ *     description: Health check endpoint for lab insights
+ *     tags: [Lab Insights]
+ *     responses:
+ *       200:
+ *         description: Service is healthy
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 status:
+ *                   type: string
+ *                 message:
+ *                   type: string
+ *                 timestamp:
+ *                   type: string
+ *                   format: date-time
+ */
 labinsightRouter.get("/test", (req, res) => {
-  res.json({ 
-    success: true,
-    status: "ok", 
-    message: "LabInsights API v3",
-    timestamp: new Date().toISOString()
-  });
-});
-
-labinsightRouter.get("/health", (req, res) => {
   res.json({
-    status: "healthy",
-    service: "labinsights",
+    success: true,
+    status: "ok",
+    message: "LabInsights API v3",
     timestamp: new Date().toISOString()
   });
 });

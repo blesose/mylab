@@ -6,7 +6,6 @@ const cycleSchema = new mongoose.Schema(
     endDate: { type: Date, required: true },
     notes: { type: String, default: "" },
     
-    // Add these new fields
     flowLevel: { 
       type: String, 
       enum: ['light', 'medium', 'heavy'],

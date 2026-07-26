@@ -16,7 +16,7 @@ const createFitness = async (req, res) => {
 
     const grade = gradeFitness(req.body);
     const aiTipData = await getFitnessNutritionTip({
-      goal: req.body.goal, // Make sure this field exists in your request
+      goal: req.body.goal,
       activityLevel: req.body.intensity,
       duration: req.body.duration,
       grade,
@@ -26,7 +26,7 @@ const createFitness = async (req, res) => {
       ...req.body,
       userId,
       grade,
-      aiTip: aiTipData.tip, // This should save the AI tip
+      aiTip: aiTipData.tip, 
     });
 
     res.status(201).json({
@@ -45,10 +45,9 @@ const getAllFitness = async (req, res) => {
     const activities = await getUserFitnessActivities(req.userId);
     const analysis = analyzeFitnessProgress(activities);
     
-    // Return activities directly (not nested in data.data)
     res.status(200).json({ 
       success: true, 
-      data: activities, // This should be the array
+      data: activities, 
       analysis 
     });
   } catch (err) {
@@ -66,7 +65,6 @@ const getFitness = async (req, res) => {
       return res.status(404).json({ success: false, message: "Activity not found" });
     }
     
-    // For single activity, just return it
     res.status(200).json({ 
       success: true, 
       data: activity 
@@ -79,8 +77,7 @@ const getFitness = async (req, res) => {
 const updateFitness = async (req, res) => {
   try {
     const updated = await updateFitnessActivity(req.params.id, req.body);
-    
-    // Regenerate AI tip when updating
+
     if (req.body.duration || req.body.intensity || req.body.goal) {
       const grade = gradeFitness({...updated.toObject(), ...req.body});
       const aiTipData = await getFitnessNutritionTip({

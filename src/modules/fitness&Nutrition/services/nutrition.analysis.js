@@ -1,6 +1,4 @@
-/**
- * Analyze nutrition records for averages and trends
- */
+// Analyze nutrition records for averages and trends
 function analyzeNutritionRecords(records) {
   if (!records || records.length === 0) {
     return { message: "No nutrition records yet", trend: "N/A" };

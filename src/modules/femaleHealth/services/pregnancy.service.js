@@ -21,7 +21,7 @@ const createPregnancyRecord = async (data) => {
     conceptionDate,
     dueDate,
     currentWeek,
-    week: week || currentWeek, // Use provided week or calculated
+    week: week || currentWeek,
     notes,
     symptoms: symptoms || [],
     emotion: emotion || '',

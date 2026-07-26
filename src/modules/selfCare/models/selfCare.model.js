@@ -15,7 +15,6 @@ const selfCareSchema = new mongoose.Schema({
       "skinCare", 
       "mindfulness", 
       "other",
-      // Add your frontend values
       "reading",
       "exercise", 
       "music",
@@ -28,19 +27,19 @@ const selfCareSchema = new mongoose.Schema({
     required: true,
   },
   
-  activity: {  // Add this field to store the activity name
+  activity: {  
     type: String,
-    required: false, // Optional if you want to keep it
+    required: false, 
   },
   
   duration: { 
     type: Number, 
     required: true,
     min: 1,
-    max: 1440 // 24 hours in minutes
+    max: 1440 
   },
   
-  // Change mood fields to accept numbers 1-10
+ 
   moodBefore: { 
     type: Number, 
     min: 1, 
@@ -55,7 +54,7 @@ const selfCareSchema = new mongoose.Schema({
     default: 5 
   },
   
-  satisfaction: { // Add this field if your frontend uses it
+  satisfaction: { 
     type: Number,
     min: 1,
     max: 10,

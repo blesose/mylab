@@ -20,7 +20,6 @@ const addSleepRecord = async (req, res) => {
   }
 };
 
-// ✅ READ ALL (Get user’s full sleep history)
 const fetchSleepHistory = async (req, res) => {
   try {
     const userId = req.userId;
@@ -37,7 +36,6 @@ const fetchSleepHistory = async (req, res) => {
   }
 };
 
-// (Get a single sleep record)
 const fetchSleepRecordById = async (req, res) => {
   try {
     const userId = req.userId;
@@ -64,32 +62,30 @@ const updateSleepRecord = async (req, res) => {
     const { recordId } = req.params;
     const updates = req.body;
 
-    console.log('Update request:', { userId, recordId, updates }); // Debug log
+    console.log('Update request:', { userId, recordId, updates }); 
 
-    // Fetch the existing record
     const existing = await SleepRecord.findOne({ _id: recordId, userId });
     if (!existing) {
-      console.log('Record not found:', recordId); // Debug log
+      console.log('Record not found:', recordId);
       return res.status(404).json({ success: false, message: "Record not found" });
     }
 
-    console.log('Existing record:', existing); // Debug log
+    console.log('Existing record:', existing);
 
-    // Check if we need to regenerate AI tip
+    
     const fieldsThatAffectTip = ["sleepStart", "sleepEnd", "sleepQuality"];
     let shouldRegenerate = false;
     
     for (const key of fieldsThatAffectTip) {
       if (updates[key] !== undefined && updates[key] !== existing[key]) {
-        console.log(`Field changed: ${key}, from: ${existing[key]}, to: ${updates[key]}`); // Debug
+        console.log(`Field changed: ${key}, from: ${existing[key]}, to: ${updates[key]}`);
         shouldRegenerate = true;
         break;
       }
     }
 
-    console.log('Should regenerate AI tip:', shouldRegenerate); // Debug
+    console.log('Should regenerate AI tip:', shouldRegenerate);
 
-    // If relevant fields changed → re-analyze & generate AI tip
     if (shouldRegenerate) {
       const newData = {
         sleepStart: updates.sleepStart || existing.sleepStart,
@@ -97,10 +93,9 @@ const updateSleepRecord = async (req, res) => {
         sleepQuality: updates.sleepQuality || existing.sleepQuality,
       };
 
-      console.log('New data for AI tip:', newData); // Debug
+      console.log('New data for AI tip:', newData);
 
       try {
-        // Validate data before calling AI helper
         if (!newData.sleepStart || !newData.sleepEnd) {
           console.warn('Missing sleep times for AI tip generation');
         } else {
@@ -109,7 +104,7 @@ const updateSleepRecord = async (req, res) => {
             newData.sleepEnd,
             newData.sleepQuality || 5
           );
-          console.log('Sleep analysis:', analysis); // Debug
+          console.log('Sleep analysis:', analysis);
 
           // Use your local AI helper
           const aiResponse = getSmartTip({
@@ -117,7 +112,7 @@ const updateSleepRecord = async (req, res) => {
             sleepEnd: newData.sleepEnd,
             sleepQuality: newData.sleepQuality || 5,
           });
-          console.log('AI response:', aiResponse); // Debug
+          console.log('AI response:', aiResponse);
 
           if (aiResponse && aiResponse.tip) {
             updates.aiTip = aiResponse.tip;
@@ -127,18 +122,17 @@ const updateSleepRecord = async (req, res) => {
         }
       } catch (aiError) {
         console.error('Error generating AI tip:', aiError);
-        // Fallback tip if AI generation fails
         updates.aiTip = "Sleep record updated. Remember to maintain consistent sleep schedule!";
       }
     }
 
-    console.log('Final updates to apply:', updates); // Debug
+    console.log('Final updates to apply:', updates); 
 
     // Apply updates
     const updated = await SleepRecord.findOneAndUpdate(
       { _id: recordId, userId },
       updates,
-      { new: true, runValidators: true } // Added runValidators
+      { new: true, runValidators: true } 
     );
 
     if (!updated) {
@@ -146,7 +140,7 @@ const updateSleepRecord = async (req, res) => {
       return res.status(500).json({ success: false, message: "Failed to update record" });
     }
 
-    console.log('Successfully updated record:', updated._id); // Debug
+    console.log('Successfully updated record:', updated._id); 
 
     res.status(200).json({
       success: true,
@@ -156,9 +150,8 @@ const updateSleepRecord = async (req, res) => {
 
   } catch (err) {
     console.error('Error in updateSleepRecord:', err);
-    console.error('Error stack:', err.stack); // Added stack trace
+    console.error('Error stack:', err.stack);
     
-    // More specific error messages
     let errorMessage = err.message;
     if (err.name === 'ValidationError') {
       errorMessage = `Validation error: ${Object.values(err.errors).map(e => e.message).join(', ')}`;
@@ -174,7 +167,6 @@ const updateSleepRecord = async (req, res) => {
   }
 };
 
-// ✅ DELETE
 const deleteSleepRecord = async (req, res) => {
   try {
     const userId = req.userId;

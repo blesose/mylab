@@ -5,7 +5,7 @@ const analyzeSleepPattern = (sleepStart, sleepEnd, sleepQuality) => {
   const end = parse(sleepEnd, "HH:mm", new Date());
   let hoursSlept = differenceInMinutes(end, start) / 60;
 
-  if (hoursSlept < 0) hoursSlept += 24; // Adjust for midnight crossover
+  if (hoursSlept < 0) hoursSlept += 24;
 
   const category =
     hoursSlept < 5 ? "Insufficient" :

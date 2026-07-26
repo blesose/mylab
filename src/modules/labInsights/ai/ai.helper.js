@@ -1,5 +1,4 @@
 function getAIInsight(prompt) {
-  // Local AI mockup for production-ready fallback
   if (!prompt) return ["No prompt provided."];
 
   if (prompt.includes("sleep")) {
@@ -30,7 +29,6 @@ function getAIInsight(prompt) {
   ];
 }
 
-/** Trend summarization */
 function summarizeReports(reports) {
   if (!Array.isArray(reports) || reports.length === 0)
     return "No historical data available.";
@@ -47,10 +45,10 @@ function summarizeReports(reports) {
   });
 
   if (improving > stable && improving > declining)
-    return "💪 Overall improvement observed. Keep it up!";
+    return "Overall improvement observed. Keep it up!";
   if (declining > improving)
-    return "⚠ Decline detected. Review your routines.";
-  return "📊 Performance stable.";
+    return "Decline detected. Review your routines.";
+  return "Performance stable.";
 }
 
 function extractScore(report) {

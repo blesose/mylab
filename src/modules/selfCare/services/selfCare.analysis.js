@@ -1,6 +1,5 @@
 const analyzeSelfCare = (duration, moodBefore, moodAfter) => {
 
-  // Helper to convert mood to number for comparison
   const moodToNumber = (mood) => {
     if (typeof mood === 'number') return mood;
     const mapping = {

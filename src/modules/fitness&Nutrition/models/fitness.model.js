@@ -25,7 +25,7 @@ const fitnessSchema = new mongoose.Schema({
     min: 1,
     max: 7
   },
-  goal: { // ADD THIS FIELD - it's used by AI helper
+  goal: { 
     type: String,
     enum: ["weight_loss", "muscle_gain", "endurance", "flexibility", "general_health"],
     required: true

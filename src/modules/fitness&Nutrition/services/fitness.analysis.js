@@ -6,7 +6,7 @@ function analyzeFitnessProgress(records) {
   const highIntensityCount = records.filter(r => r.intensity === "high").length;
   const highRatio = highIntensityCount / records.length;
 
-  const trend = highRatio > 0.6 ? "High intensity trend 💥" : "Moderate consistency 🧘‍♂";
+  const trend = highRatio > 0.6 ? "High intensity trend" : "Moderate consistency";
   const message =
     highRatio > 0.6
       ? "You’ve maintained a strong routine!"

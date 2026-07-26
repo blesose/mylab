@@ -1,22 +1,19 @@
 
-/**
- * ai.helper.js - UPDATED
- * -----------------------------------
- * Local production-grade AI helper for SleepRecovery.
- * Works offline — no external API required.
- * Generates realistic, dynamic, science-based sleep advice.
- */
+  // Local production-grade AI helper for SleepRecovery.
+  // Works offline — no external API required.
+  // Generates realistic, dynamic, science-based sleep advice.
+ 
 
 const { format } = require("date-fns");
 
-/**
- * Generates a personalized sleep tip based on user data.
- * @param {object} params - User sleep data
- * @param {string} params.sleepStart - Sleep start time (HH:mm)
- * @param {string} params.sleepEnd - Sleep end time (HH:mm)
- * @param {number} params.sleepQuality - Sleep quality 1–10
- * @returns {object} { tip, category, responseTime, generatedAt }
- */
+
+//   Generates a personalized sleep tip based on user data.
+//   @param {object} params - User sleep data
+//   @param {string} params.sleepStart - Sleep start time (HH:mm)
+//   @param {string} params.sleepEnd - Sleep end time (HH:mm)
+//  @param {number} params.sleepQuality - Sleep quality 1–10
+//   @returns {object} { tip, category, responseTime, generatedAt }
+ 
 function getSmartTip({ sleepStart, sleepEnd, sleepQuality = 5 }) {
   try {
     const startTime = new Date();
@@ -92,13 +89,11 @@ function generateTip(category, quality) {
 
   let advice = random(baseTips[category] || baseTips["Moderate rest"]);
 
-  // Add contextual nuance
   if (quality < 4) advice += " You might also want to take short breaks during the day.";
   else if (quality > 8) advice += " Excellent quality — keep your bedtime routine steady.";
 
   return advice;
 }
 
-// ... rest of the functions stay the same ...
 
 module.exports = { getSmartTip };

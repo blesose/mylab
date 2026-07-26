@@ -2,14 +2,11 @@ const SelfCare = require("../models/selfCare.model.js");
 const { analyzeSelfCare } = require("./selfCare.analysis.js");
 const { getSmartSelfCareTip } = require("../ai/ai.helper.js");
 
-// Logs a self-care activity and attaches AI-generated feedback.
 const logSelfCareActivity = async (data) => {
   const { userId, activityType, duration, moodBefore, moodAfter, notes } = data;
 
-  // Analyze mood & duration
   const analysis = analyzeSelfCare(duration, moodBefore, moodAfter);
 
-  // Generate AI recommendation
   const aiData = getSmartSelfCareTip({
     activityType,
     duration,
@@ -17,7 +14,6 @@ const logSelfCareActivity = async (data) => {
     moodAfter,
   });
 
-  // Save to DB
   const activity = new SelfCare({
     userId,
     activityType,
@@ -42,12 +38,11 @@ const logSelfCareActivity = async (data) => {
   };
 };
 
-// Fetch all self-care activities for a given user - FIXED
+
 const getAllSelfCareActivities = async (userId) => {
   try {
-    // Remove the { success: true, activity: ... } wrapper
     const activities = await SelfCare.find({ userId }).sort({ createdAt: -1 });
-    return activities; // Just return the array directly
+    return activities; 
   } catch (error) {
     console.error("Error fetching selfcare activities:", error);
     throw new Error("Failed to fetch selfcare activities");

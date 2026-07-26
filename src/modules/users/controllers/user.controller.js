@@ -49,7 +49,7 @@ const register = async (req, res) => {
       { expiresIn: "7d" }
     );
 
-    console.log("✅ User registered:", newUser.email);
+    console.log("User registered:", newUser.email);
     console.log(newUser);
 
     return res.status(201).json({
@@ -59,7 +59,7 @@ const register = async (req, res) => {
       user: sanitizeUser(newUser),
     });
   } catch (error) {
-    console.error("❌ Register error:", error.message);
+    console.error("Register error:", error.message);
     return res.status(500).json({
       success: false,
       message: "Internal Server Error",
@@ -104,7 +104,7 @@ const login = async (req, res) => {
     user.lastLogin = new Date();
     await user.save();
 
-    console.log("✅ Login successful:", user.email);
+    console.log("Login successful:", user.email);
 
     return res.status(200).json({
       success: true,
@@ -113,7 +113,7 @@ const login = async (req, res) => {
       user: sanitizeUser(user),
     });
   } catch (error) {
-    console.error("❌ Login error:", error.stack);
+    console.error("Login error:", error.stack);
     return res.status(500).json({
       success: false,
       message: "Internal Server Error",
@@ -138,7 +138,7 @@ const getProfile = async (req, res) => {
       user: sanitizeUser(user),
     });
   } catch (error) {
-    console.error("❌ Get profile error:", error.message);
+    console.error("Get profile error:", error.message);
     return res.status(500).json({
       success: false,
       message: "Internal Server Error",
@@ -163,7 +163,7 @@ const getAllUsers = async (req, res) => {
       users: users.map((u) => sanitizeUser(u)),
     });
   } catch (error) {
-    console.error("❌ Get all users error:", error.message);
+    console.error("Get all users error:", error.message);
     return res.status(500).json({
       success: false,
       message: "Internal Server Error",
@@ -197,7 +197,7 @@ const updateProfile = async (req, res) => {
       user: sanitizeUser(updatedUser),
     });
   } catch (error) {
-    console.error("❌ Update profile error:", error.message);
+    console.error("Update profile error:", error.message);
     return res.status(500).json({
       success: false,
       message: "Internal Server Error",
@@ -221,7 +221,7 @@ const deleteUser = async (req, res) => {
       message: "User deleted successfully",
     });
   } catch (error) {
-    console.error("❌ Delete user error:", error.message);
+    console.error("Delete user error:", error.message);
     return res.status(500).json({
       success: false,
       message: "Internal Server Error",

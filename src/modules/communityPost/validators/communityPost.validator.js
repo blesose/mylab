@@ -1,7 +1,4 @@
 const Joi = require("joi");
-/**
- * Validator for creating a new post
- */
 const createPostValidator = (req, res, next) => {
   const schema = Joi.object({
     title: Joi.string()
@@ -47,9 +44,6 @@ const createPostValidator = (req, res, next) => {
   next();
 };
 
-/**
- * Validator for adding a comment
- */
 const commentValidator = (req, res, next) => {
   const schema = Joi.object({
     text: Joi.string()
@@ -79,9 +73,6 @@ const commentValidator = (req, res, next) => {
   next();
 };
 
-/**
- * Validator for MongoDB ObjectId params (optional but recommended)
- */
 const validatePostId = (req, res, next) => {
   const { id, postId } = req.params;
   const idToValidate = id || postId;
@@ -93,7 +84,6 @@ const validatePostId = (req, res, next) => {
     });
   }
 
-  // Check if it's a valid MongoDB ObjectId
   const objectIdPattern = /^[0-9a-fA-F]{24}$/;
   if (!objectIdPattern.test(idToValidate)) {
     return res.status(400).json({

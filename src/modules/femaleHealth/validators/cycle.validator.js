@@ -5,8 +5,6 @@ const validateCycle = (req, res, next) => {
     startDate: Joi.date().required(),
     endDate: Joi.date().required(),
     notes: Joi.string().allow(""),
-    
-    // Add validation for new fields
     flowLevel: Joi.string().valid('light', 'medium', 'heavy').optional(),
     symptoms: Joi.array().items(Joi.string()).optional(),
     mood: Joi.string().valid('very-happy', 'happy', 'neutral', 'sad', 'very-sad', 'anxious', 'irritable').optional(),

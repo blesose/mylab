@@ -36,7 +36,6 @@ async function listRecordsHandler(req, res, next) {
 async function getRecordHandler(req, res, next) {
   try {
     const userId = req.userId;
-    // const insights = await getMenHealthInsights(userId);
     const rec = await getRecordById(userId, req.params.recordId);
     if (!rec) return res.status(404).json({ success: false, message: "Not found" });
     res.json({ success: true, data: rec });

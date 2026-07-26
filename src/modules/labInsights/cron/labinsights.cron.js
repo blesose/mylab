@@ -9,16 +9,14 @@ cron.schedule("0 2 * * 0", async () => {
     const result = await generateAllUsersWeeklyReports();
     
     if (result.success) {
-      console.log(`✅ Generated ${result.totalGenerated} weekly reports`);
-      
-      // Optional: Send email notifications to users
-      // await sendReportNotifications(result.reports);
+      console.log(`Generated ${result.totalGenerated} weekly reports`);
+     
     } else {
-      console.error("❌ Failed to generate weekly reports:", result.message);
+      console.error("Failed to generate weekly reports:", result.message);
     }
   } catch (err) {
-    console.error("❌ Cron job error:", err.message);
+    console.error("Cron job error:", err.message);
   }
 });
 
-console.log("📅 Weekly Reports Cron Job Initialized...");
+console.log("Weekly Reports Cron Job Initialized...");

@@ -6,12 +6,10 @@ const {
 
 const { generatePregnancyInsights } = require("../services/pregnancy.analysis");
 
-// ✅ Create Pregnancy Record
 const createPregnancy = async (req, res) => {
   try {
     const record = await createPregnancyRecord(req.body);
 
-    // 🧠 Generate AI health tip
     const tip = await getPregnancyTip(record);
 
     return res.status(201).json({
@@ -25,15 +23,13 @@ const createPregnancy = async (req, res) => {
   }
 };
 
-// ✅ Get Pregnancy Record
 const getPregnancy = async (req, res) => {
   try {
     const record = await getPregnancyByUser(req.params.userId);
     if (!record) return res.status(404).json({ message: "Record not found" });
 
     const insights = generatePregnancyInsights(record.currentWeek);
-    
-    // 🧠 Add AI tip too
+  o
     const tip = await getPregnancyTip(record);
 
     return res.status(200).json({
